@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uptimerobot-exporter
+  labels: &labels
+    k8s-app: uptimerobot-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels: *labels
+  template:
+    metadata:
+      labels: *labels
+    spec:
+      containers:
+        - name: exporter
+          image: ssube/uptimerobot-prometheus-exporter:master
+          imagePullPolicy: Always
+
+          env:
+            - name: UPTIMEROBOT_API_KEY
+              value: "{{ secrets.uptimerobot.api_key }}"
+
+          ports:
+            - name: metrics
+              containerPort: 9429
+
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi

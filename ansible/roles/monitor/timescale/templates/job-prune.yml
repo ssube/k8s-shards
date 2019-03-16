@@ -1,0 +1,30 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: timescale-prune
+spec:
+  schedule: "0 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: prune-exec
+              image: apextoaster/kube:master
+              args:
+                - /bin/bash
+                - -c
+                - /scripts/timescale-prune.sh metrics_values "24 hours"
+              volumeMounts:
+                - name: cluster-scripts
+                  mountPath: /scripts
+
+          serviceAccountName: timescale-prune
+          volumes:
+            # cluster scripts dir
+            - name: cluster-scripts
+              configMap:
+                name: cluster-scripts
+                defaultMode: 0755

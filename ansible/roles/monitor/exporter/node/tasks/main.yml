@@ -1,0 +1,41 @@
+# node exporter
+- name: node exporter account
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'account.yml') | from_yaml }}"
+
+- name: node exporter role
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'role.yml') | from_yaml }}"
+
+- name: node exporter role binding
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'role-binding.yml') | from_yaml }}"
+
+- name: node exporter daemon
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'daemon.yml') | from_yaml }}"
+
+- name: node exporter service
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    definition: "{{ lookup('template', 'service.yml') | from_yaml }}"
+
+- name: node exporter service monitor
+  delegate_to: "{{ cluster_delegate }}"
+  shell: kubectl -n monitor apply -f "{{ role_path }}/templates/monitor.yml"
+  environment:
+    KUBECONFIG: "{{ cluster_context }}"

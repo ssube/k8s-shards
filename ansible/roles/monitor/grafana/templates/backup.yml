@@ -1,0 +1,34 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: grafana-backup
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: backup
+              image: "{{ secrets.docker.base }}"
+              args:
+                - /bin/bash
+                - -c
+                - /scripts/grafana-backup.sh ${BUCKET_NAME}
+              env:
+                - name: AWS_ACCESS_KEY_ID
+                  value: "{{ secrets.grafana.aws.access_key }}"
+                - name: AWS_SECRET_ACCESS_KEY
+                  value: "{{ secrets.grafana.aws.secret_key }}"
+                - name: BUCKET_NAME
+                  value: "{{ cluster_domain }}-root-grafana-backup"
+              volumeMounts:
+                - name: cluster-scripts
+                  mountPath: /scripts
+          volumes:
+            # cluster scripts dir
+            - name: cluster-scripts
+              configMap:
+                name: cluster-scripts
+                defaultMode: 0755

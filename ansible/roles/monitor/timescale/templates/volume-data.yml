@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: timescale-data
+  labels:
+    k8s-app: timescale
+spec:
+  storageClassName: "{{ item.storage.class }}"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "{{ item.storage.size }}"
+  volumeMode: Filesystem
+  volumeName: "{{ item.storage.name }}"

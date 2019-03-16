@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nexus-exporter
+  namespace: monitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels: &labels
+      k8s-app: nexus-exporter
+  template:
+    metadata:
+      labels: *labels
+    spec:
+      containers:
+        - name: exporter
+          image: ocadotechnology/nexus-exporter:38acddf21db261cd63bb673c4c2193d8ea1cd3e6
+          args:
+            - --host
+            - "{{ secrets.nexus.url }}"
+            - --user
+            - "{{ secrets.nexus.monitor.user }}"
+            - --password
+            - "{{ secrets.nexus.monitor.pass }}"
+
+          ports:
+            - name: http
+              containerPort: 9184

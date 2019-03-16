@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: timescale-prune
+  labels:
+    k8s-app: timescale
+
+subjects:
+  - kind: ServiceAccount
+    name: timescale-prune
+    namespace: monitor
+
+roleRef:
+  kind: Role
+  name: timescale-prune
+  apiGroup: rbac.authorization.k8s.io

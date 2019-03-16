@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: grafana
+  labels:
+    k8s-app: grafana
+spec:
+  replicas: 1
+  serviceName: grafana
+  selector:
+    matchLabels:
+      k8s-app: grafana
+  template:
+    metadata:
+      labels:
+        k8s-app: grafana
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana:5.3.0
+          imagePullPolicy: Always
+
+          ports:
+            - name: http
+              containerPort: 3000
+
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+
+          volumeMounts: &grafana-mounts
+            - name: config
+              mountPath: /etc/grafana
+              readOnly: true
+
+      volumes:
+        - name: config
+          secret:
+            secretName: grafana-config

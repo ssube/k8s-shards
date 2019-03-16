@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: timescale-server
+  labels:
+    k8s-app: timescale
+spec:
+  serviceName: timescale-server
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: timescale
+      "{{ cluster_domain }}/timescale": server
+  template:
+    metadata:
+      labels:
+        k8s-app: timescale
+        "{{ cluster_domain }}/timescale": server
+    spec:
+      nodeSelector: {{ item.selector | to_json }}
+      containers:
+        - name: timescale
+          image: "timescale/pg_prometheus:0.2.1"
+          args:
+            - -c
+            - synchronous_commit=OFF
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "{{ item.root.pass }}"
+            - name: PGDATA
+              value: "/pg-data/{{ item.name }}"
+          ports:
+            - containerPort: 5432
+              name: db
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 4Gi
+            requests:
+              cpu: 1000m
+              memory: 4Gi
+          volumeMounts:
+            - name: timescale-data
+              mountPath: "/pg-data"
+      volumes:
+        - name: timescale-data
+          persistentVolumeClaim:
+            claimName: timescale-data

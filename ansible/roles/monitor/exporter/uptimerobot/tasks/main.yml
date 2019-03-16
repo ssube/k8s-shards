@@ -1,0 +1,20 @@
+# uptimerobot monitor
+- name: uptimerobot exporter deploy
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'deploy.yml') | from_yaml }}"
+
+- name: uptimerobot exporter service
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'service.yml') | from_yaml }}"
+
+- name: uptimerobot exporter monitor
+  delegate_to: "{{ cluster_delegate }}"
+  shell: kubectl -n monitor apply -f "{{ role_path }}/templates/monitor.yml"
+  environment:
+    KUBECONFIG: "{{ cluster_context }}"

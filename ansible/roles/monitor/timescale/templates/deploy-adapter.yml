@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: timescale-prometheus
+  labels:
+    k8s-app: timescale
+spec:
+  serviceName: timescale-prometheus
+  replicas: 1
+  selector:
+    matchLabels: &labels
+      k8s-app: timescale
+      "{{ cluster_domain }}/timescale": prometheus
+  template:
+    metadata:
+      labels: *labels
+    spec:
+      nodeSelector: {{ item.selector | to_json }}
+      containers:
+        - name: timescale-adapter
+          image: "timescale/prometheus-postgresql-adapter:0.4.1"
+          args:
+            - -log.level=info
+            - -pg.host=timescale.monitor.svc.{{ cluster_domain }}
+            - -pg.user={{ secrets.timescale.prometheus.user }}
+            - -pg.password={{ secrets.timescale.prometheus.pass }}
+            - -pg.database={{ secrets.timescale.prometheus.name }}
+            - -pg.schema=prometheus
+            - -pg.use-timescaledb
+            - -pg.db-connect-retries=3
+            - -pg.max-open-conns=8
+            - -pg.max-idle-conns=4
+          ports:
+            - containerPort: 9201
+              name: http
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi

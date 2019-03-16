@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: grafana
+  labels:
+    k8s-app: grafana
+spec:
+  tls:
+    - hosts:
+        - metrics.apextoaster.com
+      secretName: metrics-apextoaster-com-tls
+  rules:
+    - host: metrics.apextoaster.com
+      http:
+        paths:
+          - backend:
+              serviceName: grafana
+              servicePort: 80

@@ -1,0 +1,13 @@
+- name: apply nexus exporter deploy
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'deploy.yml') | from_yaml }}"
+
+- name: apply nexus exporter service
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'service.yml') | from_yaml }}"

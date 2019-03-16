@@ -1,0 +1,89 @@
+# monitoring datastore
+- name: timescale data volume
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'volume-data.yml') | from_yaml }}"
+  vars:
+    item: "{{ secrets.timescale }}"
+
+- name: timescale server deploy
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'deploy-server.yml') | from_yaml }}"
+  vars:
+    item: "{{ secrets.timescale }}"
+
+- name: timescale service
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'service.yml') | from_yaml }}"
+  vars:
+    item: "{{ secrets.timescale }}"
+
+- name: wait for timescale to be available
+  delegate_to: "{{ cluster_delegate }}"
+  shell: kubectl -n monitor get pods -l=k8s-app=timescale --field-selector=status.phase=Running
+  environment:
+    KUBECONFIG: "{{ cluster_context }}"
+  register: result
+  until: result.stdout.find("Running") != -1
+  retries: 6
+  delay: 10
+
+- name: timescale adapter deploy
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'deploy-adapter.yml') | from_yaml }}"
+  vars:
+    item: "{{ secrets.timescale }}"
+
+- name: timescale prune account
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'account-prune.yml') | from_yaml }}"
+  vars:
+    item: "{{ secrets.timescale }}"
+
+- name: timescale prune role
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'role-prune.yml') | from_yaml }}"
+  vars:
+    item: "{{ secrets.timescale }}"
+
+- name: timescale prune bind
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'bind-prune.yml') | from_yaml }}"
+  vars:
+    item: "{{ secrets.timescale }}"
+
+- name: timescale prune job
+  delegate_to: "{{ cluster_delegate }}"
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: monitor
+    resource_definition: "{{ lookup('template', 'job-prune.yml') | from_yaml }}"
+  vars:
+    item: "{{ secrets.timescale }}"
+
+# name: timescale databases
+# delegate_to: "{{ cluster_delegate }}"
+# shell: kubectl -n monitor exec -it timescale-0 -- sh -c "psql -U postgres -h localhost -c 'CREATE DATABASE {{ item.name }};'"
+# environment:
+#   KUBECONFIG: "{{ cluster_context }}"
+# with_items: "{{ timescale }}"
