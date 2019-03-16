@@ -1,0 +1,54 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: snmp-exporter
+  namespace: monitor
+  labels:
+    k8s-app: snmp-exporter
+spec:
+  endpoints:
+    - &snmp-endpoint
+      interval: 60s
+      path: /snmp
+      port: http
+      scheme: http
+      scrapeTimeout: 30s
+      relabelings:
+        - sourceLabels:
+            - __param_module
+          targetLabel: snmp_module
+        - sourceLabels:
+            - __param_target
+          targetLabel: snmp_target
+      # mikrotik params
+      params:
+        module:
+          - mikrotik-switch
+        target:
+          - switch-crs317.{{ secrets.domain }}
+    - <<: *snmp-endpoint
+      params:
+        module:
+          - synology-nas
+        target:
+          - triton.{{ secrets.domain }}
+    - <<: *snmp-endpoint
+      params:
+        module:
+          - ubnt-router
+        target:
+          - router.{{ secrets.domain }}
+    - <<: *snmp-endpoint
+      params:
+        module:
+          - ubnt-switch
+        target:
+          - switch-ts8.{{ secrets.domain }}
+ 
+  jobLabel: k8s-app
+  namespaceSelector:
+    matchNames:
+      - monitor
+  selector:
+    matchLabels:
+      k8s-app: snmp-exporter

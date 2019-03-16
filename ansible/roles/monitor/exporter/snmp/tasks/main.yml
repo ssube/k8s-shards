@@ -1,0 +1,23 @@
+- name: apply snmp-exporter config
+  kubectl:
+    command: apply
+    namespace: monitor
+    content: "{{ lookup('template', 'config.yml') }}"
+
+- name: apply snmp-exporter deploy
+  kubectl:
+    command: apply
+    namespace: monitor
+    content: "{{ lookup('template', 'deploy.yml') }}"
+
+- name: apply snmp-exporter service
+  kubectl:
+    command: apply
+    namespace: monitor
+    file: templates/service.yml
+
+- name: apply snmp-exporter monitor
+  kubectl:
+    command: apply
+    namespace: monitor
+    content: "{{ lookup('template', 'monitor.yml') }}"

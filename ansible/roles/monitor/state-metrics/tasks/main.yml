@@ -1,0 +1,48 @@
+
+- name: apply state metrics account
+  kubectl:
+    command: apply
+    namespace: kube-system
+    file: templates/account.yml
+
+- name: apply state metrics cluster role
+  kubectl:
+    command: apply
+    namespace: kube-system
+    file: templates/cluster-role.yml
+
+- name: apply state metrics cluster role binding
+  kubectl:
+    command: apply
+    namespace: kube-system
+    file: templates/cluster-role-binding.yml
+
+- name: apply state metrics role
+  kubectl:
+    command: apply
+    namespace: kube-system
+    file: templates/role.yml
+
+- name: apply state metrics role binding
+  kubectl:
+    command: apply
+    namespace: kube-system
+    file: templates/role-binding.yml
+
+- name: apply state metrics deploy
+  kubectl:
+    command: apply
+    namespace: kube-system
+    file: templates/deploy.yml
+
+- name: apply state metrics service
+  kubectl:
+    command: apply
+    namespace: kube-system
+    file: templates/service.yml
+
+- name: apply state metrics service monitor
+  kubectl:
+    command: apply
+    namespace: monitor
+    file: templates/monitor.yml
