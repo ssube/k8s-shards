@@ -1,0 +1,47 @@
+- name: apply nginx namespace
+  kubectl:
+    file: templates/ns.yml
+
+- name: apply nginx account
+  kubectl:
+    file: templates/account.yml
+
+- name: apply nginx role
+  kubectl:
+    file: templates/role.yml
+
+- name: apply nginx role binding
+  kubectl:
+    file: templates/role-binding.yml
+
+- name: apply nginx cluster role
+  kubectl:
+    file: templates/cluster-role.yml
+
+- name: apply nginx cluster role binding
+  kubectl:
+    file: templates/cluster-role-binding.yml
+
+- name: apply nginx config
+  kubectl:
+    file: templates/config-nginx.yml
+
+- name: apply nginx tcp config
+  kubectl:
+    file: templates/config-tcp.yml
+
+- name: apply nginx udp config
+  kubectl:
+    file: templates/config-udp.yml
+
+- name: apply nginx udp config
+  kubectl:
+    file: templates/config-udp.yml
+
+- name: apply nginx daemon
+  kubectl:
+    file: templates/daemon.yml
+
+- name: apply nginx service
+  kubectl:
+    file: templates/service.yml

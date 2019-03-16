@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-dns
+  labels:
+    k8s-app: home-dns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: home-dns
+  template:
+    metadata:
+      labels:
+        k8s-app: home-dns
+    spec:
+      containers:
+        - name: home-dns
+          image: ssube/home-dns:master
+          imagePullPolicy: Always
+          command:
+            - /app/home-dns
+          args:
+            - /config/home.yml
+
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: creds
+              mountPath: "/root/.aws"
+              readOnly: true
+
+      nodeSelector:
+        role: server
+      
+      volumes:
+        - name: config
+          configMap:
+            name: dns-config
+        - name: creds
+          secret:
+            secretName: dns-creds

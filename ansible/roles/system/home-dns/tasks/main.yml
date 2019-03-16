@@ -1,0 +1,14 @@
+- name: apply dns config
+  kubectl:
+    command: apply
+    file: templates/config.yml
+
+- name: apply dns credentials secret
+  kubectl:
+    command: apply
+    file: templates/secret.yml
+
+- name: apply dns deploy
+  kubectl:
+    command: apply
+    file: templates/deploy.yml

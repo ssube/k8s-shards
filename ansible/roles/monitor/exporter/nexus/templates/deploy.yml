@@ -17,7 +17,7 @@ spec:
           image: ocadotechnology/nexus-exporter:38acddf21db261cd63bb673c4c2193d8ea1cd3e6
           args:
             - --host
-            - "{{ secrets.nexus.url }}"
+            - "https://artifacts.{{ secrets.dns.base }}"
             - --user
             - "{{ secrets.nexus.monitor.user }}"
             - --password

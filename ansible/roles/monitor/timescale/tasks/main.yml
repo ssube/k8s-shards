@@ -81,9 +81,18 @@
   vars:
     item: "{{ secrets.timescale }}"
 
-# name: timescale databases
-# delegate_to: "{{ cluster_delegate }}"
-# shell: kubectl -n monitor exec -it timescale-0 -- sh -c "psql -U postgres -h localhost -c 'CREATE DATABASE {{ item.name }};'"
-# environment:
-#   KUBECONFIG: "{{ cluster_context }}"
-# with_items: "{{ timescale }}"
+- name: prometheus role
+  postgresql_user:
+    <<: &k8s-timescale
+      login_host: "timescale.monitor.svc.cluster.{{ secrets.dns.base }}"
+      login_password: "{{ secrets.timescale.root.pass }}"
+      login_user: postgres
+
+    name: "{{ secrets.timescale.prometheus.user }}"
+    password: "{{ secrets.timescale.prometheus.pass }}"
+
+- name: prometheus database
+  postgresql_db:
+    <<: *k8s-timescale
+    name: prometheus
+    owner: "{{ secrets.timescale.prometheus.user }}"
