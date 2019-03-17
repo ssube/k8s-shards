@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: luigi-server
+  namespace: monitor
+  labels: &labels
+    k8s-app: luigi
+spec:
+  replicas: 1
+  selector:
+    matchLabels: *labels
+  serviceName: luigi-server
+  template:
+    metadata:
+      labels: *labels
+    spec:
+      containers:
+        - name: server
+          image: apextoaster/luigi-server:2.8
+          ports:
+            - name: http
+              containerPort: 8082
+          volumeMounts:
+            - name: luigi-config
+              mountPath: /etc/luigi
+              readOnly: true
+      volumes:
+        - name: luigi-config
+          secret:
+            secretName: luigi-config
+            defaultMode: 0444

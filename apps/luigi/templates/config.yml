@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: luigi-config
+data:
+  "luigi.cfg": "{{ lookup('template', 'config-luigi.cfg') | b64encode }}"
+  "luigid.cfg": "{{ lookup('template', 'config-luigid.cfg') | b64encode }}"

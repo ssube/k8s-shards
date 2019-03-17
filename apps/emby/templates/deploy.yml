@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: emby
+  labels:
+    k8s-app: emby
+spec:
+  replicas: 1
+  serviceName: emby
+  selector:
+    matchLabels:
+      k8s-app: emby
+  template:
+    metadata:
+      labels:
+        k8s-app: emby
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: scylla
+
+      containers:
+        - name: emby-server
+          image: "emby/embyserver:4.0.2.0"
+          env:
+            - name: UID
+              value: "1000"
+            - name: GID
+              value: "100"
+
+          ports:
+            - containerPort: 8096
+              name: http
+            - containerPort: 8920
+              name: https
+
+          volumeMounts:
+            - name: emby-config
+              mountPath: /config
+              readOnly: false
+            - name: emby-movie
+              mountPath: /emby-movie
+              readOnly: false
+            - name: emby-music
+              mountPath: /emby-music
+              readOnly: false
+            - name: emby-tv
+              mountPath: /emby-tv
+              readOnly: false
+
+      volumes:
+        - name: emby-config
+          rbd: &rbd-volume
+            monitors: 
+              - 10.2.1.192
+            user: home-cluster
+            secretRef: 
+              name: ceph-secret
+            fsType: ext4
+            readOnly: false
+            pool: home-flash
+            image: emby-config
+
+        - name: emby-movie
+          rbd:
+            <<: *rbd-volume
+            pool: home-rust
+            image: emby-movie
+
+        - name: emby-music
+          rbd:
+            <<: *rbd-volume
+            pool: home-rust
+            image: emby-music
+
+        - name: emby-tv
+          rbd:
+            <<: *rbd-volume
+            pool: home-rust
+            image: emby-tv
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: emby
+  labels:
+    k8s-app: emby
+spec:
+  ports:
+    - name: http
+      protocol: "TCP"
+      port: 9180
+      targetPort: http
+  selector:
+    k8s-app: emby
+  type: NodePort
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+

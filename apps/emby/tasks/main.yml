@@ -1,0 +1,7 @@
+- name: apply emby server
+  kubectl:
+    file: templates/deploy.yml
+
+- name: apply emby ingress
+  kubectl:
+    file: templates/ingress.yml

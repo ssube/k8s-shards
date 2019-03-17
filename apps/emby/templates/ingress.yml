@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: emby
+  labels:
+    k8s-app: emby
+  annotations:
+    certmanager.k8s.io/cluster-issuer: "letsencrypt-production"
+    certmanager.k8s.io/acme-challenge-type: http01
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  tls:
+    - hosts:
+        - media.holdmyran.ch
+      secretName: media-holdmyranch-tls
+  rules:
+    - host: media.sg.house
+      http: &emby-http
+        paths:
+          - path: /
+            backend:
+              serviceName: emby
+              servicePort: http
+    - host: scylla.sg.house
+      http: *emby-http
+    - host: media.holdmyran.ch
+      http: *emby-http

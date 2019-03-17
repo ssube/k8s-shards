@@ -1,0 +1,17 @@
+- name: apply luigi config
+  kubectl:
+    command: apply
+    namespace: monitor
+    content: "{{ lookup('template', 'config.yml') }}"
+
+- name: apply luigi server
+  kubectl:
+    command: apply
+    namespace: monitor
+    content: "{{ lookup('template', 'deploy-server.yml') }}"
+
+- name: apply luigi service
+  kubectl:
+    command: apply
+    namespace: monitor
+    file: templates/service.yml
