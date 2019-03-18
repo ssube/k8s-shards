@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: snmp-exporter
+  namespace: monitor
+  labels:
+    k8s-app: snmp-exporter
+spec:
+  endpoints: "{{ secrets.snmp.endpoints }}"
+  jobLabel: k8s-app
+  namespaceSelector:
+    matchNames:
+      - monitor
+  selector:
+    matchLabels:
+      k8s-app: snmp-exporter

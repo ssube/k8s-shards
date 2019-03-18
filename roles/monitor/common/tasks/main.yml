@@ -1,0 +1,4 @@
+- name: monitor namespace
+  kubectl:
+    command: apply
+    file: templates/ns.yml
