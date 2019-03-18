@@ -1,0 +1,87 @@
+- name: apply cert manager namespace
+  kubectl:
+    command: apply
+    file: "templates/ns.yml"
+
+- name: apply cert manager crds
+  kubectl:
+    command: apply
+    file: "templates/{{ item }}.yml"
+  with_items:
+    - crd-certificates
+    - crd-challenges
+    - crd-cluster-issuers
+    - crd-issuers
+    - crd-orders
+
+- name: apply cert manager rbac
+  kubectl:
+    command: apply
+    file: "templates/{{ item }}.yml"
+  with_items:
+    - account-injector
+    - account-manager
+    - account-webhook
+    - cluster-role-binding-injector
+    - cluster-role-binding-manager
+    - cluster-role-binding-webhook
+    - cluster-role-edit
+    - cluster-role-injector
+    - cluster-role-manager
+    - cluster-role-view
+    - cluster-role-webhook
+    - role-binding-webhook
+
+- name: apply cert manager deploys
+  kubectl:
+    command: apply
+    file: "templates/deploy-{{ item }}.yml"
+  with_items:
+    - injector
+    - manager
+    - webhook
+
+- name: apply cert manager services
+  kubectl:
+    command: apply
+    file: "templates/{{ item }}.yml"
+  with_items:
+     - service-webhook
+
+- name: apply cert manager webhooks
+  kubectl:
+    command: apply
+    file: "templates/{{ item }}.yml"
+  with_items:
+     - webhook
+
+- name: apply cert manager api servers
+  kubectl:
+    command: apply
+    file: "templates/{{ item }}.yml"
+  with_items:
+    - api-server-webhook
+
+- name: apply cert manager internal issuers
+  kubectl:
+    command: apply
+    file: "templates/issuer-{{ item }}.yml"
+  with_items:
+    - self
+    - webhook-ca
+
+- name: apply cert manager certificates
+  kubectl:
+    command: apply
+    file: "templates/cert-{{ item }}.yml"
+  with_items:
+    - webhook-ca
+    - webhook-tls
+
+- name: apply cert manager letsencrypt issuers
+  kubectl:
+    command: apply
+    content: "{{ lookup('template', 'issuer-' + item + '.yml') }}"
+  with_items:
+    - staging
+    - production
