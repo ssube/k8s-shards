@@ -1,12 +1,12 @@
 - name: apply dns config
   kubectl:
     command: apply
-    file: templates/config.yml
+    content: "{{ lookup('template', 'config.yml') }}"
 
 - name: apply dns credentials secret
   kubectl:
     command: apply
-    file: templates/secret.yml
+    file: "{{ lookup('template', 'secret.yml') }}"
 
 - name: apply dns deploy
   kubectl:

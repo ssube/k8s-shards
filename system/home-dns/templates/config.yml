@@ -4,4 +4,4 @@ metadata:
   name: dns-config
 data:
   home.yml: |
-    {{ service.dns.config | tojson }}
+    {{ secrets.dns.config | tojson }}
