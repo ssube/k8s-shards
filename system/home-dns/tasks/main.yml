@@ -6,7 +6,7 @@
 - name: apply dns credentials secret
   kubectl:
     command: apply
-    file: "{{ lookup('template', 'secret.yml') }}"
+    content: "{{ lookup('template', 'secret.yml') }}"
 
 - name: apply dns deploy
   kubectl:
