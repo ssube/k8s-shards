@@ -2,4 +2,4 @@
   kubectl:
     command: apply
     namespace: kube-system
-    file: templates/config.yml
+    content: "{{ lookup('template', 'config.yml') }}"
