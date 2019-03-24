@@ -7,10 +7,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - metrics.{{ secrets.domain }}
-      secretName: metrics-{{ secrets.domain | replace(".", "-") }}-tls
+        - metrics.{{ secrets.dns.base }}
+      secretName: metrics-{{ secrets.dns.base | replace(".", "-") }}-tls
   rules:
-    - host: metrics.{{ secrets.domain }}
+    - host: metrics.{{ secrets.dns.base }}
       http:
         paths:
           - backend:

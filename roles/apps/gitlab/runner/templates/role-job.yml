@@ -4,7 +4,7 @@ metadata:
   name: gitlab-runner-jobs
   namespace: gitlab-jobs
   labels:
-    rbac.{{ cluster_domain }}/gitlab-runner-role: "true"
+    rbac.{{ secrets.dns.base }}/gitlab-runner-role: "true"
     k8s-app: gitlab-runner
 
 rules:

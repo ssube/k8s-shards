@@ -11,10 +11,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - media.{{ secrets.domain }}
-      secretName: media-{{ secrets.domain | replace(".", "-") }}-tls
+        - media.{{ secrets.dns.base }}
+      secretName: media-{{ secrets.dns.base | replace(".", "-") }}-tls
   rules:
-    - host: media.{{ secrets.domain }}
+    - host: media.{{ secrets.dns.base }}
       http: &emby-http
         paths:
           - path: /

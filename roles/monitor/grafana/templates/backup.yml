@@ -22,7 +22,7 @@ spec:
                 - name: AWS_SECRET_ACCESS_KEY
                   value: "{{ secrets.grafana.aws.secret_key }}"
                 - name: BUCKET_NAME
-                  value: "{{ cluster_domain }}-root-grafana-backup"
+                  value: "{{ secrets.dns.cluster }}-{{ secrets.dns.base }}-root-grafana-backup"
               volumeMounts:
                 - name: cluster-scripts
                   mountPath: /scripts

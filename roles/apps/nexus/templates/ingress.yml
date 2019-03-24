@@ -10,26 +10,27 @@ metadata:
 spec:
   tls:
     - hosts:
-        - artifacts.{{ secrets.domain }}
-        - docker-in.artifacts.{{ secrets.domain }}
-        - docker-out.artifacts.{{ secrets.domain }}
-      secretName: artifacts-{{ secrets.domain | replace(".", "-") }}-tls
+        - artifacts.{{ secrets.dns.base }}
+        - docker.artifacts.{{ secrets.dns.base }}
+        - docker-push.artifacts.{{ secrets.dns.base }}
+      secretName: artifacts-{{ secrets.dns.base | replace(".", "-") }}-tls
   rules:
-    - host: artifacts.{{ secrets.domain }}
+    - host: artifacts.{{ secrets.dns.base }}
       http:
         paths:
           - backend:
               serviceName: nexus
               servicePort: 80
-    - host: docker-in.artifacts.{{ secrets.domain }}
-      http:
-        paths:
-          - backend:
-              serviceName: nexus
-              servicePort: 8010
-    - host: docker-out.artifacts.{{ secrets.domain }}
+    - host: docker.artifacts.{{ secrets.dns.base }}
       http:
         paths:
           - backend:
               serviceName: nexus
               servicePort: 8011
+    - host: docker-push.artifacts.{{ secrets.dns.base }}
+      http:
+        paths:
+          - backend:
+              serviceName: nexus
+              servicePort: 8010
+ 

@@ -2,20 +2,17 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: timescale-server
-  labels:
+  labels: &labels
     k8s-app: timescale
+    "{{ secrets.dns.base }}/timescale": server
 spec:
   serviceName: timescale-server
   replicas: 1
   selector:
-    matchLabels:
-      k8s-app: timescale
-      "{{ cluster_domain }}/timescale": server
+    matchLabels: *labels
   template:
     metadata:
-      labels:
-        k8s-app: timescale
-        "{{ cluster_domain }}/timescale": server
+      labels: *labels
     spec:
       nodeSelector: {{ item.selector | to_json }}
       containers:

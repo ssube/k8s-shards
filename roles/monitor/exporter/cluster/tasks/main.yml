@@ -1,24 +1,25 @@
 # cluster monitors
 - name: cluster manager service
-  delegate_to: "{{ cluster_delegate }}"
-  k8s:
-    kubeconfig: "{{ cluster_context }}"
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
     namespace: monitor
-    resource_definition: "{{ lookup('template', 'service-manager.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'service-manager.yml') | from_yaml }}"
 
 - name: cluster scheduler service
-  delegate_to: "{{ cluster_delegate }}"
-  k8s:
-    kubeconfig: "{{ cluster_context }}"
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
     namespace: monitor
-    resource_definition: "{{ lookup('template', 'service-scheduler.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'service-scheduler.yml') | from_yaml }}"
 
 # service monitors
 - name: cluster service monitors
-  delegate_to: "{{ cluster_delegate }}"
-  shell: kubectl -n monitor apply -f "{{ role_path }}/templates/monitor-{{ item }}.yml"
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'monitor-' + item + '.yml') | from_yaml }}"
   with_items:
     - apiserver
     - kubelet

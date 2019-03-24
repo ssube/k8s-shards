@@ -12,7 +12,7 @@ RUNNER_CONFIG="/etc/gitlab-runner/config.toml"
 echo "Registering new runner..."
 gitlab-runner register \
   --non-interactive --name {{ gitlab_runner.name }}-runner \
-  --url "http://gitlab.gitlab.svc.{{ cluster_domain }}" \
+  --url "https://git.{{ secrets.dns.base }}" \
   --registration-token {{secrets.runner.token}} \
   --executor kubernetes --kubernetes-namespace gitlab-jobs \
   --tag-list "{{ item.tags | join(',') }}"

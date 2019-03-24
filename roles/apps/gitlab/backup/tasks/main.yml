@@ -1,29 +1,29 @@
 # gitlab backup
 - name: gitlab server backup account
-  delegate_to: "{{ cluster_delegate }}"
-  k8s:
-    kubeconfig: "{{ cluster_context }}"
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
     namespace: gitlab
     definition: "{{ lookup('template', 'server/backup-account.yml') | from_yaml }}"
 
 - name: gitlab server backup role
-  delegate_to: "{{ cluster_delegate }}"
-  k8s:
-    kubeconfig: "{{ cluster_context }}"
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
     namespace: gitlab
     definition: "{{ lookup('template', 'server/backup-role.yml') | from_yaml }}"
  
 - name: gitlab server backup role binding
-  delegate_to: "{{ cluster_delegate }}"
-  k8s:
-    kubeconfig: "{{ cluster_context }}"
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
     namespace: gitlab
     definition: "{{ lookup('template', 'server/backup-role-binding.yml') | from_yaml }}"
   
 - name: gitlab server backup job
-  delegate_to: "{{ cluster_delegate }}"
-  k8s:
-    kubeconfig: "{{ cluster_context }}"
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
     namespace: gitlab
     definition: "{{ lookup('template', 'server/backup.yml') | from_yaml }}"
  

@@ -7,7 +7,7 @@ metadata:
 spec:
   baseImage: quay.io/prometheus/prometheus
   remoteWrite:
-    - url: http://timescale.monitor.svc.{{ secrets.domain }}/write
+    - url: http://timescale.monitor.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}/write
       queue_config:
         capacity: 50000
         max_shards: 10

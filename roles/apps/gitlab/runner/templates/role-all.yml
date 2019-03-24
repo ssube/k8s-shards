@@ -8,6 +8,6 @@ metadata:
 aggregationRule:
   clusterRoleSelectors:
     - matchLabels:
-        rbac.{{ cluster_domain }}/gitlab-runner-role: "true"
+        rbac.{{ secrets.dns.base }}/gitlab-runner-role: "true"
 rules: []
 

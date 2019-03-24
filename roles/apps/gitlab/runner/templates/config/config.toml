@@ -3,7 +3,7 @@ check_interval = 30
 
 [[runners]]
   name = "{{ gitlab_runner.name }}-{{ item.name }}-runner"
-  url = "http://gitlab.gitlab.svc.{{ cluster_domain }}"
+  url = "https://git.{{ secrets.dns.base }}"
   token = "TOKEN"
   executor = "kubernetes"
 

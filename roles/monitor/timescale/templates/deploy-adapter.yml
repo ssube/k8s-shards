@@ -10,7 +10,7 @@ spec:
   selector:
     matchLabels: &labels
       k8s-app: timescale
-      "{{ cluster_domain }}/timescale": prometheus
+      "{{ secrets.dns.base }}/timescale": prometheus
   template:
     metadata:
       labels: *labels
@@ -21,7 +21,7 @@ spec:
           image: "timescale/prometheus-postgresql-adapter:0.4.1"
           args:
             - -log.level=info
-            - -pg.host=timescale.monitor.svc.{{ cluster_domain }}
+            - -pg.host=timescale.monitor.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}
             - -pg.user={{ secrets.timescale.prometheus.user }}
             - -pg.password={{ secrets.timescale.prometheus.pass }}
             - -pg.database={{ secrets.timescale.prometheus.name }}

@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - git.{{ secrets.domain }}
-      secretName: git-{{ secrets.domain | replace(".", "-") }}-tls
+        - git.{{ secrets.dns.base }}
+      secretName: git-{{ secrets.dns.base | replace(".", "-") }}-tls
   rules:
-    - host: git.{{ secrets.domain }}
+    - host: git.{{ secrets.dns.base }}
       http:
         paths:
           - backend:
