@@ -1,36 +1,25 @@
 # prometheus instance
 - name: prometheus service account
-  delegate_to: "{{ cluster_delegate }}"
-  k8s:
-    kubeconfig: "{{ cluster_context }}"
+  kubectl:
     namespace: monitor
-    definition: "{{ lookup('template', 'account.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'account.yml') | from_yaml }}"
 
 - name: prometheus cluster role
-  delegate_to: "{{ cluster_delegate }}"
-  k8s:
-    kubeconfig: "{{ cluster_context }}"
+  kubectl:
     namespace: monitor
-    definition: "{{ lookup('template', 'role.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'role.yml') | from_yaml }}"
 
 - name: prometheus role binding
-  delegate_to: "{{ cluster_delegate }}"
-  k8s:
-    kubeconfig: "{{ cluster_context }}"
+  kubectl:
     namespace: monitor
-    definition: "{{ lookup('template', 'role-binding.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'role-binding.yml') | from_yaml }}"
 
 - name: prometheus deploy
-  delegate_to: "{{ cluster_delegate }}"
-  k8s:
-    kubeconfig: "{{ cluster_context }}"
+  kubectl:
     namespace: monitor
-    definition: "{{ lookup('template', 'deploy.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'deploy.yml') | from_yaml }}"
 
 - name: prometheus service
-  delegate_to: "{{ cluster_delegate }}"
-  k8s:
-    kubeconfig: "{{ cluster_context }}"
+  kubectl:
     namespace: monitor
-    src: "{{ role_path }}/templates/service.yml"
-
+    file: "{{ role_path }}/templates/service.yml"

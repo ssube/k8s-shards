@@ -1,0 +1,69 @@
+- name: gitlab namespaces
+  k8s:
+    kubeconfig: "{{ cluster_context }}"
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ item }}"
+  with_items:
+    - gitlab
+    - gitlab-jobs
+
+- name: gitlab server assets
+  environment:
+    KUBECONFIG: "{{ cluster_context }}"
+  kubectl:
+    namespace: gitlab
+    content: "{{ lookup('template', 'assets.yml') | from_yaml }}"
+
+- name: gitlab server config
+  environment:
+    KUBECONFIG: "{{ cluster_context }}"
+  kubectl:
+    namespace: gitlab
+    definition: "{{ lookup('template', 'config.yml') | from_yaml }}"
+
+- name: gitlab server data volume
+  environment:
+    KUBECONFIG: "{{ cluster_context }}"
+  kubectl:
+    namespace: gitlab
+    definition: "{{ lookup('template', 'volume-data.yml') | from_yaml }}"
+
+- name: gitlab server secrets volume
+  environment:
+    KUBECONFIG: "{{ cluster_context }}"
+  kubectl:
+    namespace: gitlab
+    definition: "{{ lookup('template', 'volume-secrets.yml') | from_yaml }}"
+
+- name: gitlab server deploy
+  environment:
+    KUBECONFIG: "{{ cluster_context }}"
+  kubectl:
+    namespace: gitlab
+    definition: "{{ lookup('template', 'deploy.yml') | from_yaml }}"
+
+- name: gitlab server service
+  environment:
+    KUBECONFIG: "{{ cluster_context }}"
+  kubectl:
+    namespace: gitlab
+    definition: "{{ lookup('template', 'service.yml') | from_yaml }}"
+
+- name: gitlab server ingress
+  environment:
+    KUBECONFIG: "{{ cluster_context }}"
+  kubectl:
+    namespace: gitlab
+    definition: "{{ lookup('template', 'ingress.yml') | from_yaml }}"
+
+- name: gitlab server monitors
+  environment:
+    KUBECONFIG: "{{ cluster_context }}"
+  kubectl:
+    content: "{{ lookup('template', 'monitor-{{ item }}.yml') }}"
+  with_items:
+    - metrics
+    - rails

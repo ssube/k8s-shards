@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-data
+  labels:
+    k8s-app: gitlab
+spec:
+  storageClassName: "{{ gitlab.storage.data.class }}"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "{{ gitlab.storage.data.size }}"
+  volumeMode: Filesystem
+  volumeName: "{{ gitlab.storage.data.name }}"

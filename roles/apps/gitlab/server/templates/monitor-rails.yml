@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: gitlab-rails
+  labels:
+    k8s-app: gitlab
+spec:
+  endpoints:
+    - interval: 30s
+      path: /-/metrics
+      port: http
+      scheme: http
+  jobLabel: component
+  namespaceSelector:
+    matchNames:
+      - default
+  selector:
+    matchLabels:
+      k8s-app: gitlab

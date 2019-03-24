@@ -1,0 +1,50 @@
+concurrent = {{ item.concurrent }}
+check_interval = 30
+
+[[runners]]
+  name = "{{ gitlab_runner.name }}-{{ item.name }}-runner"
+  url = "http://gitlab.gitlab.svc.{{ cluster_domain }}"
+  token = "TOKEN"
+  executor = "kubernetes"
+
+  builds_dir = "/build/src/git.{{ secrets.dns.base }}"
+  cache_dir = "/cache"
+
+  [runners.cache]
+    Type = "s3"
+    ServerAddress = "s3-{{ secrets.region.primary }}.amazonaws.com"
+    AccessKey = "{{ secrets.bot.access_key }}"
+    SecretKey = "{{ secrets.bot.secret_key }}"
+    BucketName = "{{ secrets.bucket.cache }}"
+    Shared = true
+
+  [runners.kubernetes]
+    image = "apextoaster/base"
+    namespace = "gitlab-jobs"
+    namespace_overwrite_allowed = "{{ secrets.runner.allow.namespaces }}"
+
+    privileged = true
+    pull_policy = "always"
+
+    cpu_limit = "{{ item.cpu.limit }}"
+    cpu_request = "{{ item.cpu.request }}"
+    memory_limit = "{{ item.memory.limit }}"
+    memory_request = "{{ item.memory.request }}"
+
+    poll_interval = 30
+    poll_timeout = 600
+    service_account_overwrite_allowed = "{{ secrets.runner.allow.accounts }}"
+
+    [runners.kubernetes.node_selector]
+{% for key in item.selector %}
+{% set value = item.selector[key] %}
+      "{{ key }}" = "{{ value }}"
+{% endfor %}
+
+    [runners.kubernetes.pod_annotations]
+      "iam.amazonaws.com/role" = "arn:aws:iam::{{ secrets.tags.account }}:role/{{ secrets.tags.project }}-gitlab-job"
+
+    [[runners.kubernetes.volumes.empty_dir]]
+      name = "build"
+      mount_path = "/build"
+      medium = "Memory"

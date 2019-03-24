@@ -1,0 +1,141 @@
+#jinja2: trim_blocks: False
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: gitlab
+spec:
+  selector:
+    matchLabels:
+      k8s-app: gitlab
+  serviceName: gitlab
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: gitlab
+
+    spec:
+      containers:
+      - name: gitlab
+        image: "gitlab/gitlab-{{ gitlab.edition }}:{{ gitlab.version }}-{{ gitlab.edition }}.0"
+
+        # ports
+        ports:
+        - containerPort: 22
+          name: ssh
+        - containerPort: 80
+          name: http
+        - containerPort: 8181
+          name: workhorse
+        - containerPort: 9168
+          name: monitor
+
+# {% if gitlab.healthcheck == true %}
+        livenessProbe:
+          initialDelaySeconds: 300
+          periodSeconds: 30
+          failureThreshold: 6
+          successThreshold: 1
+
+          httpGet:
+            path: /-/liveness
+            port: workhorse
+
+        readinessProbe:
+          initialDelaySeconds: 300
+          periodSeconds: 30
+          failureThreshold: 6
+          successThreshold: 1
+
+          httpGet:
+            path: /-/readiness
+            port: workhorse
+# {% endif %}
+
+        resources:
+          requests:
+            cpu: 2
+            memory: 8Gi
+          limits:
+            cpu: 4
+            memory: 12Gi
+
+        # volumes
+        volumeMounts: &gitlab_volumes
+          - name: cluster-scripts
+            mountPath: /scripts
+          - name: gitlab-assets
+            mountPath: /assets/sshd_config
+            subPath: sshd_config
+          - name: gitlab-config
+            mountPath: /config
+          - name: gitlab-data
+            mountPath: /data
+          - name: gitlab-secrets
+            mountPath: /etc/gitlab
+            readOnly: false
+
+      # init
+      initContainers:
+      - name: gitlab-init
+        image: "apextoaster/kube:master"
+
+        command:
+          - /bin/bash
+        args:
+          - -c
+          - "/scripts/gitlab-init.sh {{ secrets.gitlab.data }}"
+        volumeMounts: *gitlab_volumes
+
+      nodeSelector: "{{ gitlab.selector | to_json }}"
+
+      terminationGracePeriodSeconds: 60
+      volumes:
+        # cluster scripts dir
+        - name: cluster-scripts
+          configMap:
+            name: cluster-scripts
+            defaultMode: 0755
+        # gitlab assets dir
+        - name: gitlab-assets
+          secret:
+            secretName: gitlab-assets
+            items:
+              - key: sshd_config
+                mode: 0400
+                path: sshd_config
+        # gitlab config and secrets
+        - name: gitlab-config
+          secret:
+            secretName: gitlab-config
+            items:
+              - key: gitlab.rb
+                mode: 0444
+                path: gitlab-config.rb
+              - key: gitlab-secrets.json
+                mode: 0666
+                path: gitlab-secrets.json
+              - key: ssh_host_ecdsa_key
+                mode: 0400
+                path: ssh_host_ecdsa_key
+              - key: ssh_host_ecdsa_key.pub
+                mode: 0400
+                path: ssh_host_ecdsa_key.pub
+              - key: ssh_host_ed25519_key
+                mode: 0400
+                path: ssh_host_ed25519_key
+              - key: ssh_host_ed25519_key.pub
+                mode: 0400
+                path: ssh_host_ed25519_key.pub
+              - key: ssh_host_rsa_key
+                mode: 0400
+                path: ssh_host_rsa_key
+              - key: ssh_host_rsa_key.pub
+                mode: 0400
+                path: ssh_host_rsa_key.pub
+        - name: gitlab-data
+          persistentVolumeClaim:
+            claimName: gitlab-data
+        - name: gitlab-secrets
+          persistentVolumeClaim:
+            claimName: gitlab-secrets

@@ -1,0 +1,24 @@
+- name: nexus namespace
+  kubectl:
+    file: templates/ns.yml
+
+- name: nexus data volume
+  delegate_to: "{{ cluster_delegate }}"
+  kubectl:
+    namespace: nexus
+    content: "{{ lookup('template', 'volume-data.yml') | from_yaml }}"
+
+- name: nexus deploy
+  kubectl:
+    namespace: nexus
+    content: "{{ lookup('template', 'deploy.yml') | from_yaml }}"
+
+- name: nexus service
+  kubectl:
+    namespace: nexus
+    content: "{{ lookup('template', 'service.yml') | from_yaml }}"
+
+- name: nexus ingress
+  kubectl:
+    namespace: nexus
+    content: "{{ lookup('template', 'ingress.yml') | from_yaml }}"

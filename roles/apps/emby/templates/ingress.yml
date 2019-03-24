@@ -11,17 +11,13 @@ metadata:
 spec:
   tls:
     - hosts:
-        - media.holdmyran.ch
-      secretName: media-holdmyranch-tls
+        - media.{{ secrets.domain }}
+      secretName: media-{{ secrets.domain | replace(".", "-") }}-tls
   rules:
-    - host: media.sg.house
+    - host: media.{{ secrets.domain }}
       http: &emby-http
         paths:
           - path: /
             backend:
               serviceName: emby
               servicePort: http
-    - host: scylla.sg.house
-      http: *emby-http
-    - host: media.holdmyran.ch
-      http: *emby-http

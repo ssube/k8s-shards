@@ -10,9 +10,8 @@
 
 - name: install kubernetes packages
   apt:
-    name: "{{ item }}"
     update_cache: yes
-  with_items:
-    - kubeadm
-    - kubectl
-    - kubelet
+    name:
+      - kubeadm
+      - kubectl
+      - kubelet

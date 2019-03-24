@@ -7,10 +7,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - metrics.apextoaster.com
-      secretName: metrics-apextoaster-com-tls
+        - metrics.{{ secrets.domain }}
+      secretName: metrics-{{ secrets.domain | replace(".", "-") }}-tls
   rules:
-    - host: metrics.apextoaster.com
+    - host: metrics.{{ secrets.domain }}
       http:
         paths:
           - backend:

@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nexus
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 512m
+  labels:
+    k8s-app: nexus
+
+spec:
+  tls:
+    - hosts:
+        - artifacts.{{ secrets.domain }}
+        - docker-in.artifacts.{{ secrets.domain }}
+        - docker-out.artifacts.{{ secrets.domain }}
+      secretName: artifacts-{{ secrets.domain | replace(".", "-") }}-tls
+  rules:
+    - host: artifacts.{{ secrets.domain }}
+      http:
+        paths:
+          - backend:
+              serviceName: nexus
+              servicePort: 80
+    - host: docker-in.artifacts.{{ secrets.domain }}
+      http:
+        paths:
+          - backend:
+              serviceName: nexus
+              servicePort: 8010
+    - host: docker-out.artifacts.{{ secrets.domain }}
+      http:
+        paths:
+          - backend:
+              serviceName: nexus
+              servicePort: 8011

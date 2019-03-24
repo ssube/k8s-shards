@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nexus
+spec:
+  selector:
+    matchLabels:
+      k8s-app: nexus
+  serviceName: nexus
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: nexus
+    
+    spec:
+      containers:
+        - name: nexus
+          image: "ssube/nexus-ext:3.15.2"
+
+          ports:
+            - containerPort: 8081
+              name: http
+            - containerPort: 8082
+              name: docker-in
+            - containerPort: 8083
+              name: docker-out
+
+          resources:
+            requests:
+              memory: 2Gi
+            limits:
+              cpu: 2
+              memory: 2Gi
+
+          volumeMounts: &nexus-volumes
+            - name: cluster-scripts
+              mountPath: /scripts
+            - mountPath: /nexus-data
+              name: nexus-data
+              readOnly: false
+
+      initContainers:
+        - name: nexus-init
+          image: {{ secrets.docker.base }}
+
+          command:
+            - /bin/bash
+          args:
+            - -c
+            - "/scripts/nexus-init.sh /nexus-data"
+
+          volumeMounts: *nexus-volumes
+
+      nodeSelector:
+        zone: maple
+        role: apps
+      
+      terminationGracePeriodSeconds: 60
+      volumes:
+        # cluster scripts dir
+        - name: cluster-scripts
+          configMap:
+            name: cluster-scripts
+            defaultMode: 0755
+        - name: nexus-data
+          persistentVolumeClaim:
+            claimName: nexus-data

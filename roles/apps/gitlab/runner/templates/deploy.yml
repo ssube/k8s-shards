@@ -1,0 +1,62 @@
+#jinja2: trim_blocks: False
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitlab-runner-{{ item.name }}
+  labels:
+    k8s-app: gitlab-runner
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: gitlab-runner
+
+  template:
+    metadata:
+      labels:
+        k8s-app: gitlab-runner
+      annotations:
+        "cluster-autoscaler.kubernetes.io/safe-to-evict": "true"
+
+    spec:
+      containers:
+        - name: gitlab-runner
+          image: "gitlab/gitlab-runner:v{{ gitlab_runner.version }}"
+          imagePullPolicy: "Always"
+          command:
+            - bash
+          args:
+            - -c
+            - /config/setup.sh
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+
+      nodeSelector:
+# {% for name in item.selector.keys() | list %}
+# {% set value = item.selector[name] %}
+        "{{ name }}": "{{ value }}"
+# {% endfor %}
+
+      serviceAccountName: gitlab-runner
+      volumes:
+        - name: config
+          secret:
+            secretName: gitlab-runner-config-{{ item.name }}
+            items:
+# {% for name in secrets.runner.config.keys() | list %}
+# {% set body = secrets.runner.config[name] %}
+              - key: "{{ name }}"
+                mode: {{ body.mode }}
+                path: "{{ body.path | default(name) }}"
+# {% endfor %}
+

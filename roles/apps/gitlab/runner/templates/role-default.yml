@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: gitlab-runner-default
+  namespace: default
+  labels:
+    rbac.{{ cluster_domain }}/gitlab-runner-role: "true"
+    k8s-app: gitlab-runner
+
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch"]

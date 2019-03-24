@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gitlab
+  labels:
+    k8s-app: gitlab
+
+spec:
+  tls:
+    - hosts:
+        - git.{{ secrets.domain }}
+      secretName: git-{{ secrets.domain | replace(".", "-") }}-tls
+  rules:
+    - host: git.{{ secrets.domain }}
+      http:
+        paths:
+          - backend:
+              serviceName: gitlab
+              servicePort: 80

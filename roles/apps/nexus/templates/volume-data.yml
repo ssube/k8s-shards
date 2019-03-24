@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nexus-data
+  labels:
+    k8s-app: nexus
+spec:
+  storageClassName: "{{ nexus.storage.data.class }}"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "{{ nexus.storage.data.size }}"
+  volumeMode: Filesystem
+  volumeName: "{{ nexus.storage.data.name }}"

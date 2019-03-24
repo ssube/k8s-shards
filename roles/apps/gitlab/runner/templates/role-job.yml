@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: gitlab-runner-jobs
+  namespace: gitlab-jobs
+  labels:
+    rbac.{{ cluster_domain }}/gitlab-runner-role: "true"
+    k8s-app: gitlab-runner
+
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/exec"]
+    verbs: ["create", "delete", "get", "list", "watch"]

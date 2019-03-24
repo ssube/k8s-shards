@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: gitlab-monitor
+  labels:
+    k8s-app: gitlab
+spec:
+  endpoints:
+    - interval: 60s
+      path: /-/metrics?token={{ secrets.gitlab.health.token }}
+      port: monitor
+      scheme: http
+  jobLabel: component
+  namespaceSelector:
+    matchNames:
+      - gitlab
+  selector:
+    matchLabels:
+      k8s-app: gitlab

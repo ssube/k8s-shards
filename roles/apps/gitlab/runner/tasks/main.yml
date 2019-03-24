@@ -1,0 +1,50 @@
+# gitlab runners
+- name: gitlab runner account
+  kubectl:
+    kubeconfig: "{{ cluster_context }}"
+    namespace: gitlab
+    definition: "{{ lookup('template', 'runner/account.yml') | from_yaml }}"
+
+- name: gitlab runner config data
+  template:
+    dest: /tmp/gitlab-runner-config-{{ item.name }}.toml
+    mode: preserve
+    src: runner/assets/config.toml
+  with_items: "{{ gitlab_runner.flavors }}"
+
+- name: gitlab runner config
+  kubectl:
+    namespace: gitlab
+    content: "{{ lookup('template', 'config.yml') | from_yaml }}"
+  with_items: "{{ gitlab_runner.flavors }}"
+ 
+- name: gitlab runner secrets
+  kubectl:
+    namespace: gitlab-jobs
+    content: "{{ lookup('template', 'secrets.yml') | from_yaml }}"
+ 
+- name: gitlab runner default role
+  kubectl:
+    namespace: gitlab
+    content: "{{ lookup('template', 'role-default.yml') | from_yaml }}"
+ 
+- name: gitlab runner job role
+  kubectl:
+    namespace: gitlab
+    content: "{{ lookup('template', 'role-job.yml') | from_yaml }}"
+ 
+- name: gitlab runner all roles
+  kubectl:
+    namespace: gitlab
+    content: "{{ lookup('template', 'role-all.yml') | from_yaml }}"
+ 
+- name: gitlab runner role binding
+  kubectl:
+    namespace: gitlab
+    content: "{{ lookup('template', 'role-binding.yml') | from_yaml }}"
+
+- name: gitlab runner deploy
+  kubectl:
+    namespace: gitlab
+    content: "{{ lookup('template', 'deploy.yml') | from_yaml }}"
+  with_items: "{{ gitlab_runner.flavors }}"
