@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ceph
+  labels:
+    k8s-app: ceph
+spec:
+  type: ExternalName
+  externalName: {{ secrets.ceph.mons[0].hostname }}
+  ports:
+    - name: metrics
+      port: 9283
+      protocol: TCP
+      targetPort: metrics

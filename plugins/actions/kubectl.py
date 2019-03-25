@@ -19,22 +19,26 @@ class ActionModule(ActionBase):
 
         # we must use vars, since task_vars will have un-processed variables
         command = self._task.args.get('command', 'apply')
+        content = self._task.args.get('content', '')
         file = self._task.args.get('file', '-')
 
-        if file is '-':
-            content = self._task.args.get('content')
+        if content is not '':
             with tempfile.NamedTemporaryFile(delete=False) as content_file:
                 content_file.write(content)
                 content_file.flush()
                 return self.execute_file(command, content_file.name, tmp, task_vars)
-        else:
+        elif file is not '-':
             return self.execute_file(command, file, tmp, task_vars)
+        else:
+            return self.execute_command(command, tmp, task_vars)
 
-    def execute_file(self, command, file, tmp, task_vars):
-        argv=[
-            'kubectl',
-            command,
-        ]
+    def get_args(self, command):
+        argv=['kubectl']
+
+        if type(command) == list:
+            argv.extend(command)
+        else:
+            argv.append(command)
 
         if self._play_context.check_mode:
             argv.append('--dry-run')
@@ -45,10 +49,31 @@ class ActionModule(ActionBase):
                 self._task.args.get('namespace'),
             ])
 
+        return argv
+
+    def execute_file(self, command, file, tmp, task_vars):
+        argv = self.get_args(command)
         argv.extend([
             '-f',
             file,
         ])
+
+        role_path = task_vars.get('role_path')
+        command_args=dict(
+            argv=argv,
+            chdir=role_path,
+        )
+
+        display.display('kubectl %s' % (command_args))
+        return self._execute_module(
+            module_name='command',
+            module_args=command_args,
+            task_vars=task_vars,
+            tmp=tmp,
+        )
+
+    def execute_command(self, command, tmp, task_vars):
+        argv = self.get_args(command)
 
         role_path = task_vars.get('role_path')
         command_args=dict(

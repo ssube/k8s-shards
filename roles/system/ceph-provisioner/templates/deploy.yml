@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rbd-provisioner
+  labels: &labels
+    k8s-app: ceph-provisioner
+spec:
+  replicas: 1
+  selector:
+    matchLabels: *labels
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels: *labels
+    spec:
+      containers:
+      - name: rbd-provisioner
+        image: "quay.io/external_storage/rbd-provisioner:latest"
+        env:
+        - name: PROVISIONER_NAME
+          value: ceph.com/rbd
+      serviceAccount: rbd-provisioner

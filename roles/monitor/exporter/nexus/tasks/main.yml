@@ -3,11 +3,11 @@
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'deploy.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'deploy.yml') }}"
 
 - name: apply nexus exporter service
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'service.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'service.yml') }}"

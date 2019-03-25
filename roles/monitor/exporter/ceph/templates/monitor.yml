@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ceph-home
+  namespace: monitor
+  labels:
+    k8s-app: ceph
+spec:
+  namespaceSelector:
+    matchNames:
+      - default
+  selector:
+    matchLabels:
+      k8s-app: ceph
+  endpoints:
+  - port: metrics
+    path: /metrics
+    interval: 15s

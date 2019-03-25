@@ -4,26 +4,26 @@
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'server/backup-account.yml') | from_yaml }}"
+    definition: "{{ lookup('template', 'server/backup-account.yml') }}"
 
 - name: gitlab server backup role
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'server/backup-role.yml') | from_yaml }}"
+    definition: "{{ lookup('template', 'server/backup-role.yml') }}"
  
 - name: gitlab server backup role binding
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'server/backup-role-binding.yml') | from_yaml }}"
+    definition: "{{ lookup('template', 'server/backup-role-binding.yml') }}"
   
 - name: gitlab server backup job
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'server/backup.yml') | from_yaml }}"
+    definition: "{{ lookup('template', 'server/backup.yml') }}"
  

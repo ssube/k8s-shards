@@ -4,39 +4,39 @@
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'account.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'account.yml') }}"
 
 - name: node exporter role
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'role.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'role.yml') }}"
 
 - name: node exporter role binding
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'role-binding.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'role-binding.yml') }}"
 
 - name: node exporter daemon
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'daemon.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'daemon.yml') }}"
 
 - name: node exporter service
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'service.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'service.yml') }}"
 
 - name: node exporter service monitor
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'monitor.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'monitor.yml') }}"

@@ -1,3 +1,4 @@
+#jinja2: trim_blocks:False
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -41,5 +42,9 @@ spec:
               mountPath: "/pg-data"
       volumes:
         - name: timescale-data
-          persistentVolumeClaim:
-            claimName: timescale-data
+          rbd:
+            <<: {{ secrets.ceph.volume | to_json }}
+            monitors: {{ secrets.ceph.mons | map(attribute='hostname') | list | to_json }}
+            readOnly: false
+            pool: home-flash
+            image: timescale-data

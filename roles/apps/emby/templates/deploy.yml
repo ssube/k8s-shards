@@ -1,3 +1,4 @@
+#jinja2: trim_blocks:False
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -49,52 +50,35 @@ spec:
 
       volumes:
         - name: emby-config
+# {% if secrets.emby.volume.type == 'rbd' %}
           rbd: &rbd-volume
-            monitors: 
-              - 10.2.1.192
-            user: home-cluster
-            secretRef: 
-              name: ceph-secret
-            fsType: ext4
+            <<: {{ secrets.ceph.volume | to_json }}
+            monitors: {{ secrets.ceph.mons | map(attribute='hostname') | list | to_json }}
             readOnly: false
             pool: home-flash
             image: emby-config
+# {% endif %}
 
         - name: emby-movie
+# {% if secrets.emby.volume.type == 'rbd' %}
           rbd:
             <<: *rbd-volume
             pool: home-rust
             image: emby-movie
+# {% endif %}
 
         - name: emby-music
+# {% if secrets.emby.volume.type == 'rbd' %}
           rbd:
             <<: *rbd-volume
             pool: home-rust
             image: emby-music
+# {% endif %}
 
         - name: emby-tv
+# {% if secrets.emby.volume.type == 'rbd' %}
           rbd:
             <<: *rbd-volume
             pool: home-rust
             image: emby-tv
-
----
-
-kind: Service
-apiVersion: v1
-metadata:
-  name: emby
-  labels:
-    k8s-app: emby
-spec:
-  ports:
-    - name: http
-      protocol: "TCP"
-      port: 9180
-      targetPort: http
-  selector:
-    k8s-app: emby
-  type: NodePort
-  sessionAffinity: None
-  externalTrafficPolicy: Cluster
-
+# {% endif %}

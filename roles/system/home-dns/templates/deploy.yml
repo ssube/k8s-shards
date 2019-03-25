@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: home-dns
-          image: ssube/home-dns:master
+          image: ssube/home-dns:{{ secrets.home-dns.tag }}
           imagePullPolicy: Always
           command:
             - /app/home-dns
@@ -32,12 +32,12 @@ spec:
               readOnly: true
 
       nodeSelector:
-        role: server
+        node-role.kubernetes.io/server: ""
       
       volumes:
         - name: config
           configMap:
-            name: dns-config
+            name: home-dns
         - name: creds
           secret:
-            secretName: dns-creds
+            secretName: home-dns-creds

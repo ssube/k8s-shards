@@ -1,0 +1,18 @@
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: emby
+  labels:
+    k8s-app: emby
+spec:
+  ports:
+    - name: http
+      protocol: "TCP"
+      port: 9180
+      targetPort: http
+  selector:
+    k8s-app: emby
+  type: NodePort
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster

@@ -1,84 +1,89 @@
 # monitoring datastore
 - name: timescale data volume
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'volume-data.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'volume-data.yml') }}"
   vars:
     item: "{{ secrets.timescale }}"
 
 - name: timescale server deploy
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'deploy-server.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'deploy-server.yml') }}"
   vars:
     item: "{{ secrets.timescale }}"
 
 - name: timescale service
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'service.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'service.yml') }}"
   vars:
     item: "{{ secrets.timescale }}"
 
 - name: wait for timescale to be available
+  check_mode: no
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    command: get pods -l=k8s-app=timescale --field-selector=status.phase=Running
-  register: result
-  until: result.stdout.find("Running") != -1
+    command:
+      - get
+      - pods
+      - -l=k8s-app=timescale
+      - --field-selector=status.phase=Running
+  register: timescale_result
+  until: timescale_result.stdout.find("Running") != -1
   retries: 6
   delay: 10
 
 - name: timescale adapter deploy
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'deploy-adapter.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'deploy-adapter.yml') }}"
   vars:
     item: "{{ secrets.timescale }}"
 
 - name: timescale prune account
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'account-prune.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'account-prune.yml') }}"
   vars:
     item: "{{ secrets.timescale }}"
 
 - name: timescale prune role
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'role-prune.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'role-prune.yml') }}"
   vars:
     item: "{{ secrets.timescale }}"
 
 - name: timescale prune bind
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'bind-prune.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'bind-prune.yml') }}"
   vars:
     item: "{{ secrets.timescale }}"
 
 - name: timescale prune job
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'job-prune.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'job-prune.yml') }}"
   vars:
     item: "{{ secrets.timescale }}"
 

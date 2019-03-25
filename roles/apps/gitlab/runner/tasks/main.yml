@@ -4,14 +4,14 @@
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'runner/account.yml') | from_yaml }}"
+    definition: "{{ lookup('template', 'runner/account.yml') }}"
 
 - name: gitlab runner config
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    content: "{{ lookup('template', 'config.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'config.yml') }}"
   with_items: "{{ gitlab_runner.flavors }}"
  
 - name: gitlab runner secrets
@@ -19,40 +19,40 @@
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab-jobs
-    content: "{{ lookup('template', 'secrets.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'secrets.yml') }}"
  
 - name: gitlab runner default role
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    content: "{{ lookup('template', 'role-default.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'role-default.yml') }}"
  
 - name: gitlab runner job role
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    content: "{{ lookup('template', 'role-job.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'role-job.yml') }}"
  
 - name: gitlab runner all roles
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    content: "{{ lookup('template', 'role-all.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'role-all.yml') }}"
  
 - name: gitlab runner role binding
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    content: "{{ lookup('template', 'role-binding.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'role-binding.yml') }}"
 
 - name: gitlab runner deploy
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    content: "{{ lookup('template', 'deploy.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'deploy.yml') }}"
   with_items: "{{ gitlab_runner.flavors }}"

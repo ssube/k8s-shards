@@ -1,0 +1,42 @@
+- name: apply ceph provisioner account
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: kube-system
+    content: "{{ lookup('template', 'account.yml') }}"
+
+- name: apply ceph provisioner cluster role
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: kube-system
+    content: "{{ lookup('template', 'cluster-role.yml') }}"
+
+- name: apply ceph provisioner cluster role binding
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: kube-system
+    content: "{{ lookup('template', 'cluster-role-binding.yml') }}"
+
+- name: apply ceph provisioner role
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: kube-system
+    content: "{{ lookup('template', 'role.yml') }}"
+
+- name: apply ceph provisioner role binding
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: kube-system
+    content: "{{ lookup('template', 'role-binding.yml') }}"
+
+- name: apply ceph provisioner deploy
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: kube-system
+    content: "{{ lookup('template', 'deploy.yml') }}"
+

@@ -1,0 +1,4 @@
+- name: apply ceph secret
+  kubectl:
+    command: apply
+    content: "{{ lookup('template', 'secret.yml') }}"

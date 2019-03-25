@@ -3,4 +3,4 @@ kind: Secret
 metadata:
   name: grafana-config
 data:
-  "grafana.ini": "{{ lookup('template', 'grafana/config.ini') | b64encode }}"
+  "grafana.ini": "{{ lookup('template', 'config.ini') | b64encode }}"

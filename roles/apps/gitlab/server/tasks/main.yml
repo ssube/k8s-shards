@@ -1,6 +1,6 @@
 - name: gitlab namespaces
   k8s:
-    kubeconfig: "{{ cluster_context }}"
+    kubeconfig: "{{ secrets.context }}"
     definition:
       apiVersion: v1
       kind: Namespace
@@ -12,56 +12,56 @@
 
 - name: gitlab server assets
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    content: "{{ lookup('template', 'assets.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'assets.yml') }}"
 
 - name: gitlab server config
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'config.yml') | from_yaml }}"
+    definition: "{{ lookup('template', 'config.yml') }}"
 
 - name: gitlab server data volume
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'volume-data.yml') | from_yaml }}"
+    definition: "{{ lookup('template', 'volume-data.yml') }}"
 
 - name: gitlab server secrets volume
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'volume-secrets.yml') | from_yaml }}"
+    definition: "{{ lookup('template', 'volume-secrets.yml') }}"
 
 - name: gitlab server deploy
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'deploy.yml') | from_yaml }}"
+    definition: "{{ lookup('template', 'deploy.yml') }}"
 
 - name: gitlab server service
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'service.yml') | from_yaml }}"
+    definition: "{{ lookup('template', 'service.yml') }}"
 
 - name: gitlab server ingress
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'ingress.yml') | from_yaml }}"
+    definition: "{{ lookup('template', 'ingress.yml') }}"
 
 - name: gitlab server monitors
   environment:
-    KUBECONFIG: "{{ cluster_context }}"
+    KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     content: "{{ lookup('template', 'monitor-{{ item }}.yml') }}"
   with_items:

@@ -3,15 +3,15 @@
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
-    namespace: monitor
-    content: "{{ lookup('template', 'service-manager.yml') | from_yaml }}"
+    namespace: kube-system
+    content: "{{ lookup('template', 'service-manager.yml') }}"
 
 - name: cluster scheduler service
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
-    namespace: monitor
-    content: "{{ lookup('template', 'service-scheduler.yml') | from_yaml }}"
+    namespace: kube-system
+    content: "{{ lookup('template', 'service-scheduler.yml') }}"
 
 # service monitors
 - name: cluster service monitors
@@ -19,7 +19,7 @@
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'monitor-' + item + '.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'monitor-' + item + '.yml') }}"
   with_items:
     - apiserver
     - kubelet

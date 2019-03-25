@@ -2,20 +2,19 @@
 - name: prometheus operator service account
   kubectl:
     namespace: monitor
-    definition: "{{ lookup('template', 'account.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'account.yml') }}"
 
 - name: prometheus operator cluster role
   kubectl:
     namespace: monitor
-    definition: "{{ lookup('template', 'role.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'role.yml') }}"
 
 - name: prometheus operator role binding
   kubectl:
     namespace: monitor
-    definition: "{{ lookup('template', 'role-binding.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'role-binding.yml') }}"
 
 - name: prometheus operator deploy
   kubectl:
     namespace: monitor
-    definition: "{{ lookup('template', 'deploy.yml') | from_yaml }}"
-
+    content: "{{ lookup('template', 'deploy.yml') }}"

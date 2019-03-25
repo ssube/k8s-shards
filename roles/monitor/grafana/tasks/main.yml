@@ -4,38 +4,38 @@
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'config.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'config.yml') }}"
 
 - name: grafana data volume
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'volume-data.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'volume-data.yml') }}"
  
 - name: grafana deploy
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'deploy.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'deploy.yml') }}"
  
 - name: grafana service
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'service.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'service.yml') }}"
  
 - name: grafana ingress
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
-    content: "{{ lookup('template', 'ingress.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'ingress.yml') }}"
  
 - name: grafana backup
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'backup.yml') | from_yaml }}"
+    content: "{{ lookup('template', 'backup.yml') }}"

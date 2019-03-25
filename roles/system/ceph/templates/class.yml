@@ -1,0 +1,16 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ item.name }}
+provisioner: ceph.com/rbd
+parameters:
+  monitors: "{{ secrets.ceph.mons | map(attribute='hostname') | join(',') }}"
+  pool: "{{ item.name }}"
+  adminId: admin
+  adminSecretNamespace: kube-system
+  adminSecretName: ceph-admin-secret
+  userId: kube
+  userSecretNamespace: kube-system
+  userSecretName: ceph-secret
+  imageFormat: "2"
+  imageFeatures: layering

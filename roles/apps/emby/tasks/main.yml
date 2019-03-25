@@ -1,7 +1,11 @@
 - name: apply emby server
   kubectl:
-    file: templates/deploy.yml
+    content: "{{ lookup('template', 'deploy.yml') }}"
+
+- name: apply emby service
+  kubectl:
+    content: "{{ lookup('template', 'service.yml') }}"
 
 - name: apply emby ingress
   kubectl:
-    file: templates/ingress.yml
+    content: "{{ lookup('template', 'ingress.yml') }}"

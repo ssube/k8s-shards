@@ -11,7 +11,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: backup
-              image: "{{ secrets.docker.base }}"
+              image: apextoaster/kube:master
               args:
                 - /bin/bash
                 - -c
