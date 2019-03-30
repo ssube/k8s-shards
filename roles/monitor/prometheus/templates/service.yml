@@ -10,4 +10,4 @@ spec:
     protocol: TCP
     targetPort: web
   selector:
-    prometheus: k8s
+    prometheus: {{ secrets.prometheus.name }}

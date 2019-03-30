@@ -2,21 +2,16 @@ apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
   labels:
-    k8s-app: k8s
-  name: k8s
+    k8s-app: prometheus
+    "{{ secrets.dns.base }}/prometheus": "{{ secrets.prometheus.name }}"
+  name: "{{ secrets.prometheus.name }}"
+  namespace: monitor
 spec:
-  baseImage: quay.io/prometheus/prometheus
+  additionalScrapeConfigs:
+    name: prometheus-home-extra
+    key: scrape.yml
   remoteWrite:
     - url: http://timescale.monitor.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}/write
-      queue_config:
-        capacity: 50000
-        max_shards: 10
-        max_samples_per_send: 500
-        batch_send_deadline: 10s
-        max_retries: 3
-        min_backoff: 100ms
-        max_backoff: 1s
-
   replicas: 1
   resources:
     requests:
@@ -25,10 +20,10 @@ spec:
     limits:
       cpu: 1
       memory: 1Gi
-  retention: 5m
+  retention: 2h
   serviceAccountName: prometheus
   serviceMonitorSelector:
     matchExpressions:
     - key: k8s-app
       operator: Exists
-  version: v2.4.2
+  version: v2.8.1

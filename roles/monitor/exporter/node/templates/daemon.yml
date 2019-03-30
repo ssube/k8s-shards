@@ -23,9 +23,12 @@ spec:
       hostNetwork: true
       hostPID: true
       containers:
-      - image: quay.io/prometheus/node-exporter:v0.15.2
+      - image: quay.io/prometheus/node-exporter:v0.17.0
         args:
         - "--collector.mountstats"
+        - "--collector.logind"
+        - "--collector.ntp"
+        - "--collector.systemd"
         - "--path.procfs=/host/proc"
         - "--path.sysfs=/host/sys"
         - "--web.listen-address=127.0.0.1:9101"
