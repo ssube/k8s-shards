@@ -14,6 +14,11 @@
     namespace: monitor
     content: "{{ lookup('template', 'role-binding.yml') }}"
 
+- name: prometheus scrape config
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'secret-scrape.yml') }}"
+
 - name: prometheus deploy
   kubectl:
     namespace: monitor
@@ -23,3 +28,8 @@
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'service.yml') }}"
+
+- name: prometheus monitor
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'monitor.yml') }}"

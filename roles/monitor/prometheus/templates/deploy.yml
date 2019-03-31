@@ -10,6 +10,10 @@ spec:
   additionalScrapeConfigs:
     name: prometheus-home-extra
     key: scrape.yml
+  podMetadata:
+    labels:
+      k8s-app: prometheus
+      "{{ secrets.dns.base }}/prometheus": "{{ secrets.prometheus.name }}"
   remoteWrite:
     - url: http://timescale.monitor.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}/write
   replicas: 1
