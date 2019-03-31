@@ -16,7 +16,7 @@ spec:
               args:
                 - /bin/bash
                 - -c
-                - /scripts/timescale-prune.sh metrics_values "24 hours"
+                - /scripts/timescale-prune.sh metrics_values "3 days"
               volumeMounts:
                 - name: cluster-scripts
                   mountPath: /scripts

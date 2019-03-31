@@ -6,7 +6,7 @@ metadata:
   labels:
     k8s-app: snmp-exporter
 spec:
-  endpoints: "{{ secrets.snmp.endpoints }}"
+  endpoints: {{ secrets.snmp.endpoints | to_json }}
   jobLabel: k8s-app
   namespaceSelector:
     matchNames:
