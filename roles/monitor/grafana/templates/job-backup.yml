@@ -8,7 +8,6 @@ spec:
     spec:
       template:
         spec:
-          restartPolicy: Never
           containers:
             - name: backup
               image: apextoaster/kube:master
@@ -26,6 +25,8 @@ spec:
               volumeMounts:
                 - name: cluster-scripts
                   mountPath: /scripts
+          restartPolicy: Never
+          serviceAccountName: grafana-backup
           volumes:
             # cluster scripts dir
             - name: cluster-scripts

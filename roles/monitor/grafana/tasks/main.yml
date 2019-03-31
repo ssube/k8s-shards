@@ -33,9 +33,30 @@
   kubectl:
     content: "{{ lookup('template', 'ingress.yml') }}"
  
-- name: grafana backup
+- name: grafana backup account
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: monitor
-    content: "{{ lookup('template', 'backup.yml') }}"
+    content: "{{ lookup('template', 'account-backup.yml') }}"
+
+- name: grafana backup job
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'job-backup.yml') }}"
+
+- name: grafana backup role
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'role-backup.yml') }}"
+
+- name: grafana backup role binding
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'role-binding-backup.yml') }}"

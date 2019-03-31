@@ -11,4 +11,4 @@
 - name: apply dns deploy
   kubectl:
     command: apply
-    file: templates/deploy.yml
+    content: "{{ lookup('template', 'deploy.yml') }}"
