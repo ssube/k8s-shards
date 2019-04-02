@@ -42,9 +42,14 @@ spec:
               mountPath: "/pg-data"
       volumes:
         - name: timescale-data
+# {% if secrets.timescale.storage.type == 'pvc' %}
+          persistentVolumeClaim:
+            claimName: timescale-data
+# {% elif secrets.timescale.storage.type == 'rbd' %}
           rbd:
             <<: {{ secrets.ceph.volume | to_json }}
             monitors: {{ secrets.ceph.mons | map(attribute='hostname') | list | to_json }}
             readOnly: false
             pool: home-flash
             image: timescale-data
+# {% endif %}

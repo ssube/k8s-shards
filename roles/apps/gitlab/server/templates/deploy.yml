@@ -87,7 +87,7 @@ spec:
           - "/scripts/gitlab-init.sh {{ secrets.gitlab.data }}"
         volumeMounts: *gitlab_volumes
 
-      nodeSelector: "{{ gitlab.selector | to_json }}"
+      nodeSelector: {{ gitlab.selector | to_json }}
 
       terminationGracePeriodSeconds: 60
       volumes:

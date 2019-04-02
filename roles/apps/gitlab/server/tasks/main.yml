@@ -15,49 +15,49 @@
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    content: "{{ lookup('template', 'assets.yml') }}"
+    content: "{{ lookup('template', 'secret-assets.yml') }}"
 
 - name: gitlab server config
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'config.yml') }}"
+    content: "{{ lookup('template', 'secret-config.yml') }}"
 
 - name: gitlab server data volume
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'volume-data.yml') }}"
+    content: "{{ lookup('template', 'volume-data.yml') }}"
 
 - name: gitlab server secrets volume
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'volume-secrets.yml') }}"
+    content: "{{ lookup('template', 'volume-secrets.yml') }}"
 
 - name: gitlab server deploy
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'deploy.yml') }}"
+    content: "{{ lookup('template', 'deploy.yml') }}"
 
 - name: gitlab server service
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'service.yml') }}"
+    content: "{{ lookup('template', 'service.yml') }}"
 
 - name: gitlab server ingress
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'ingress.yml') }}"
+    content: "{{ lookup('template', 'ingress.yml') }}"
 
 - name: gitlab server monitors
   environment:

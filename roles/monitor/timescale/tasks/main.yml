@@ -5,6 +5,7 @@
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'volume-data.yml') }}"
+  when: secrets.timescale.storage.type == 'pvc'
   vars:
     item: "{{ secrets.timescale }}"
 
