@@ -2,12 +2,13 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: timescale-server
+  name: timescale-{{ item.name }}-server
   labels: &labels
     k8s-app: timescale
-    "{{ secrets.dns.base }}/timescale": server
+    "{{ secrets.dns.base }}/timescale/name": "{{ item.name }}"
+    "{{ secrets.dns.base }}/timescale/role": "server"
 spec:
-  serviceName: timescale-server
+  serviceName: timescale-{{ item.name }}-server
   replicas: 1
   selector:
     matchLabels: *labels
@@ -17,8 +18,8 @@ spec:
     spec:
       nodeSelector: {{ item.selector | to_json }}
       containers:
-        - name: timescale
-          image: "timescale/pg_prometheus:0.2.1"
+        - name: server
+          image: "timescale/pg_prometheus:{{ item.version }}"
           args:
             - -c
             - synchronous_commit=OFF
@@ -40,16 +41,18 @@ spec:
           volumeMounts:
             - name: timescale-data
               mountPath: "/pg-data"
+              readOnly: false
+
       volumes:
         - name: timescale-data
 # {% if secrets.timescale.storage.type == 'pvc' %}
           persistentVolumeClaim:
-            claimName: timescale-data
+            claimName: timescale-{{ item.name }}-data
 # {% elif secrets.timescale.storage.type == 'rbd' %}
           rbd:
             <<: {{ secrets.ceph.volume | to_json }}
             monitors: {{ secrets.ceph.mons | map(attribute='hostname') | list | to_json }}
             readOnly: false
             pool: home-flash
-            image: timescale-data
+            image: timescale-{{ item.name }}-data
 # {% endif %}

@@ -1,15 +1,16 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres-data
+  name: postgres-{{ item.name }}-data
   labels:
     k8s-app: postgres
-
+    "{{ secrets.dns.base }}/postgres/name": "{{ item.name }}"
+    "{{ secrets.dns.base }}/postgres/role": "server"
 spec:
-  storageClassName: "{{ postgres_instance.storage.class }}"
+  storageClassName: "{{ item.storage.class }}"
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: "{{ postgres_instance.storage.size }}"
-  volumeName: "{{ postgres_instance.storage.name }}"
+      storage: "{{ item.storage.size }}"
+  volumeName: "{{ item.storage.name }}"

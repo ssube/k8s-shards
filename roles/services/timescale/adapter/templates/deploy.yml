@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: timescale-prometheus
-  labels:
+  name: timescale-{{ item.name }}-adapter
+  labels: &labels
     k8s-app: timescale
+    "{{ secrets.dns.base }}/timescale/name": "{{ item.name }}"
+    "{{ secrets.dns.base }}/timescale/role": "adapter"
 spec:
-  serviceName: timescale-prometheus
+  serviceName: timescale-adapter
   replicas: 1
   selector:
-    matchLabels: &labels
-      k8s-app: timescale
-      "{{ secrets.dns.base }}/timescale": prometheus
+    matchLabels: *labels
   template:
     metadata:
       labels: *labels
     spec:
       nodeSelector: {{ item.selector | to_json }}
       containers:
-        - name: timescale-adapter
+        - name: adapter
           image: "timescale/prometheus-postgresql-adapter:0.4.1"
           args:
             - -log.level=info
-            - -pg.host=timescale.monitor.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}
-            - -pg.user={{ secrets.timescale.prometheus.user }}
-            - -pg.password={{ secrets.timescale.prometheus.pass }}
-            - -pg.database={{ secrets.timescale.prometheus.name }}
+            - -pg.host=timescale-{{ item.name }}.monitor.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}
+            - -pg.user={{ item.user }}
+            - -pg.password={{ item.pass }}
+            - -pg.database={{ item.name }}
             - -pg.schema=prometheus
             - -pg.use-timescaledb
             - -pg.db-connect-retries=3

@@ -1,0 +1,64 @@
+# monitoring datastore
+- name: timescale data volume
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'volume-data.yml') }}"
+  when: secrets.timescale.storage.type == 'pvc'
+  vars:
+    item: "{{ secrets.timescale }}"
+
+- name: timescale server deploy
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'deploy.yml') }}"
+  vars:
+    item: "{{ secrets.timescale }}"
+
+- name: timescale service
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'service.yml') }}"
+  vars:
+    item: "{{ secrets.timescale }}"
+
+- name: wait for timescale to be available
+  check_mode: no
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: monitor
+    command:
+      - get
+      - pods
+      - -l=k8s-app=timescale
+      - -l="{{ secrets.dns.base }}/timescale/name={{ item.name }}"
+      - -l="{{ secrets.dns.base }}/timescale/role=server"
+      - --field-selector=status.phase=Running
+  register: timescale_result
+  until: timescale_result.stdout.find("Running") != -1
+  retries: 6
+  delay: 10
+
+- name: timescale roles
+  postgresql_user:
+    login_host: "timescale-{{ item.0.name }}.{{ item.0.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}"
+    login_password: "{{ item.0.root.pass }}"
+    login_user: postgres
+    name: "{{ item.1.name }}"
+    password: "{{ item.1.pass }}"
+  loop: "{{ secrets.timescale | subelements('roles') }}"
+
+- name: timescale databases
+  postgresql_db:
+    login_host: "timescale-{{ item.0.name }}.{{ item.0.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}"
+    login_password: "{{ item.0.root.pass }}"
+    login_user: postgres
+    name: "{{ item.1.name }}"
+    owner: "{{ item.1.owner }}"
+  loop: "{{ secrets.timescale | subelements('databases') }}"

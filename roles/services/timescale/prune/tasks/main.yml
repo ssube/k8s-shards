@@ -1,0 +1,35 @@
+- name: timescale prune account
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'account.yml') }}"
+  vars:
+    item: "{{ secrets.timescale }}"
+
+- name: timescale prune role
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'role.yml') }}"
+  vars:
+    item: "{{ secrets.timescale }}"
+
+- name: timescale prune bind
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'role-binding.yml') }}"
+  vars:
+    item: "{{ secrets.timescale }}"
+
+- name: timescale prune job
+  environment:
+    KUBECONFIG: "{{ secrets.context }}"
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'job.yml') }}"
+  vars:
+    item: "{{ secrets.timescale }}"

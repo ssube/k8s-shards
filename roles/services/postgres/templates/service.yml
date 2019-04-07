@@ -1,11 +1,13 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: postgres
-spec:
-  selector:
+  name: postgres-{{ item.name }}
+  labels: &labels
     k8s-app: postgres
-
+    "{{ secrets.dns.base }}/postgres/name": "{{ item.name }}"
+    "{{ secrets.dns.base }}/postgres/role": "server"
+spec:
+  selector: *labels
   ports:
   - port: 5432
     targetPort: db

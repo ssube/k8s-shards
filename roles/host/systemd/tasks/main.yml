@@ -1,0 +1,5 @@
+- name: cron - prune journal
+  cron:
+    name: journal-prune
+    special_time: hourly
+    job: journalctl --vacuum-size=2G

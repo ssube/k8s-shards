@@ -1,41 +1,41 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: postgres
-  labels:
+  name: postgres-{{ item.name }}
+  labels: &labels
     k8s-app: postgres
+    "{{ secrets.dns.base }}/postgres/name": "{{ item.name }}"
+    "{{ secrets.dns.base }}/postgres/role": "server"
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      k8s-app: postgres
+    matchLabels: *labels
   serviceName: postgres
   template:
     metadata:
-      labels:
-        k8s-app: postgres
+      labels: *labels
     spec:
+      nodeSelector: {{ item.selector | to_json }}
       containers:
-      - name: postgres
-        image: postgres:{{ postgres_instance.version }}
+      - name: server
+        image: postgres:{{ item.version }}
         env:
           - name: PGDATA
-            value: /data/postgres/pgdata
+            value: "/pg-data/{{ item.name }}"
           - name: POSTGRES_PASSWORD
-            value: "{{ postgres_instance.root.pass }}"
+            value: "{{ item.root.pass }}"
         ports:
         - name: db
           containerPort: 5432
         volumeMounts:
           - name: postgres-data
-            mountPath: /data/postgres
+            mountPath: /pg-data
             readOnly: false
 
-      nodeSelector: {{ postgres_instance.selector | to_json }}
       volumes:
         - name: postgres-config
           secret:
-            secretName: postgres-config
+            secretName: postgres-{{ item.name }}-config
         - name: postgres-data
           persistentVolumeClaim:
-            claimName: postgres-data
+            claimName: postgres-{{ item.name }}-data

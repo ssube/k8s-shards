@@ -18,9 +18,9 @@
   environment:
     KUBECONFIG: "{{ secrets.context }}"
   kubectl:
-    namespace: monitor
+    namespace: "{{ secrets.monitor.namespace }}"
     content: "{{ lookup('template', 'monitor-' + item + '.yml') }}"
-  with_items:
+  loop:
     - apiserver
     - kubelet
     - manager

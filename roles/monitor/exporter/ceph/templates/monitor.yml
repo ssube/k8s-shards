@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: ceph-home
-  namespace: monitor
+  namespace: "{{ secrets.monitor.namespace }}"
   labels:
     k8s-app: ceph
 spec:
