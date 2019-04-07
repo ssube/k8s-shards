@@ -18,4 +18,4 @@ spec:
   selector:
     matchLabels:
       k8s-app: prometheus
-      "{{ secrets.dns.base }}/prometheus": "{{ secrets.prometheus.name }}"
+      "{{ secrets.dns.base }}/prometheus": "{{ item.name }}"

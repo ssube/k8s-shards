@@ -2,9 +2,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: prometheus
-  labels:
+  labels: &labels
     k8s-app: prometheus
-    "{{ secrets.dns.base }}/prometheus": "{{ secrets.prometheus.name }}"
+    "{{ secrets.dns.base }}/prometheus": "{{ item.name }}"
 spec:
   type: ClusterIP
   ports:
@@ -12,6 +12,4 @@ spec:
     port: 9090
     protocol: TCP
     targetPort: web
-  selector:
-    k8s-app: prometheus
-    "{{ secrets.dns.base }}/prometheus": "{{ secrets.prometheus.name }}"
+  selector: *labels

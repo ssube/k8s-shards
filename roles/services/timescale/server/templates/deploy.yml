@@ -5,8 +5,8 @@ metadata:
   name: timescale-{{ item.name }}-server
   labels: &labels
     k8s-app: timescale
-    "{{ secrets.dns.base }}/timescale/name": "{{ item.name }}"
-    "{{ secrets.dns.base }}/timescale/role": "server"
+    "{{ secrets.dns.base }}/timescale-name": "{{ item.name }}"
+    "{{ secrets.dns.base }}/timescale-role": "server"
 spec:
   serviceName: timescale-{{ item.name }}-server
   replicas: 1
@@ -45,14 +45,14 @@ spec:
 
       volumes:
         - name: timescale-data
-# {% if secrets.timescale.storage.type == 'pvc' %}
+# {% if item.storage.type == 'pvc' %}
           persistentVolumeClaim:
             claimName: timescale-{{ item.name }}-data
-# {% elif secrets.timescale.storage.type == 'rbd' %}
+# {% elif item.storage.type == 'rbd' %}
           rbd:
             <<: {{ secrets.ceph.volume | to_json }}
             monitors: {{ secrets.ceph.mons | map(attribute='hostname') | list | to_json }}
             readOnly: false
-            pool: home-flash
-            image: timescale-{{ item.name }}-data
+            pool: {{ item.storage.class }}
+            image: {{ item.storage.name }}
 # {% endif %}

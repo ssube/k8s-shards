@@ -4,8 +4,7 @@
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'account.yml') }}"
-  vars:
-    item: "{{ secrets.timescale }}"
+  loop: "{{ secrets.timescale_server }}"
 
 - name: timescale prune role
   environment:
@@ -13,8 +12,7 @@
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'role.yml') }}"
-  vars:
-    item: "{{ secrets.timescale }}"
+  loop: "{{ secrets.timescale_server }}"
 
 - name: timescale prune bind
   environment:
@@ -22,8 +20,7 @@
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'role-binding.yml') }}"
-  vars:
-    item: "{{ secrets.timescale }}"
+  loop: "{{ secrets.timescale_server }}"
 
 - name: timescale prune job
   environment:
@@ -31,5 +28,4 @@
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'job.yml') }}"
-  vars:
-    item: "{{ secrets.timescale }}"
+  loop: "{{ secrets.timescale_server }}"

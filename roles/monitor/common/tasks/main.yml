@@ -1,4 +1,4 @@
 - name: monitor namespace
   kubectl:
     command: apply
-    file: templates/ns.yml
+    content: "{{ lookup('template', 'ns.yml') }}"

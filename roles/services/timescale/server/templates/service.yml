@@ -1,7 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: timescale
+  name: timescale-{{ item.name }}
+  labels: &labels
+    k8s-app: timescale
+    "{{ secrets.dns.base }}/timescale-name": "{{ item.name }}"
 spec:
   ports:
   - name: db
@@ -10,5 +13,4 @@ spec:
   - name: http
     port: 80
     targetPort: http
-  selector:
-    k8s-app: timescale
+  selector: *labels

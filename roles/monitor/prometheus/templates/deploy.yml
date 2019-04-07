@@ -1,21 +1,19 @@
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
-  labels:
+  labels: &labels
     k8s-app: prometheus
-    "{{ secrets.dns.base }}/prometheus": "{{ secrets.prometheus.name }}"
-  name: "{{ secrets.prometheus.name }}"
+    "{{ secrets.dns.base }}/prometheus": "{{ item.name }}"
+  name: "{{ item.name }}"
   namespace: monitor
 spec:
   additionalScrapeConfigs:
-    name: prometheus-home-extra
+    name: prometheus-{{ item.name }}-scrape
     key: scrape.yml
   podMetadata:
-    labels:
-      k8s-app: prometheus
-      "{{ secrets.dns.base }}/prometheus": "{{ secrets.prometheus.name }}"
+    labels: *labels
   remoteWrite:
-    - url: http://timescale.monitor.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}/write
+    - url: http://timescale-{{ item.postgres.name }}.{{ item.postgres.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}/write
   replicas: 1
   resources:
     requests:
@@ -30,4 +28,4 @@ spec:
     matchExpressions:
     - key: k8s-app
       operator: Exists
-  version: v2.8.1
+  version: v{{ item.version }}
