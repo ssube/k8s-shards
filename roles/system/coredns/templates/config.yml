@@ -8,13 +8,15 @@ data:
         errors
         health
         kubernetes {{ secrets.dns.cluster }}.{{ secrets.dns.base }} in-addr.arpa ip6.arpa {
-           pods insecure
+           pods verified
            upstream
            fallthrough in-addr.arpa ip6.arpa
         }
         prometheus :9153
-        proxy {{ secrets.dns.base }}. {{ secrets.dns.upstream | first }}
-        proxy . {{ secrets.dns.upstream[1:] | join(' ') }}
+        proxy {{ secrets.dns.base }} {{ secrets.dns.upstream | first }}
+        proxy . {{ secrets.dns.upstream | join(' ') }} {
+          policy sequential
+        }
         cache 30
         loop
         reload
