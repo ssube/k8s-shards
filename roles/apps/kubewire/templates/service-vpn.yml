@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubewire-vpn
+  namespace: vpn
+  labels:
+    k8s-app: kubewire
+spec:
+  type: NodePort
+  ports:
+  - port: 5182
+    targetPort: tunnel
+    protocol: UDP
+    nodePort: 32367
+  selector:
+    k8s-app: kubewire

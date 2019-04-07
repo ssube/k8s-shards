@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubewire
+  namespace: vpn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: kubewire
+  template:
+    metadata:
+      labels:
+        k8s-app: kubewire
+    spec:
+      containers:
+      - image: ssube/kubewire:master
+        name: kubewire
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        env:
+        - name: KUBEWIRE_KEY_PATH
+          value: /tmp/kubewire.key
+        - name: KUBEWIRE_VPN_HOST_RANGE
+          value: "10.200.100.1/32"
+        ports:
+        - name: tunnel
+          containerPort: 5182 # network tunnel
+          protocol: UDP
+        - name: http
+          containerPort: 80 # web ui
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 200m
+            memory: 250Mi
+          requests:
+            cpu: 100m
+            memory: 150Mi
