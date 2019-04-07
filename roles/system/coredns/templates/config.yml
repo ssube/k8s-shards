@@ -13,7 +13,8 @@ data:
            fallthrough in-addr.arpa ip6.arpa
         }
         prometheus :9153
-        proxy . {{ secrets.dns.upstream | join(' ') }}
+        proxy {{ secrets.dns.base }}. {{ secrets.dns.upstream | first }}
+        proxy . {{ secrets.dns.upstream[1:] | join(' ') }}
         cache 30
         loop
         reload
