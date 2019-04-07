@@ -1,0 +1,31 @@
+- name: update repos
+  apt:
+    update_cache: yes
+
+- name: install secure apt transport
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+
+
+- name: install common
+  apt:
+    name:
+      - dnsutils
+      - git
+      - gnupg2
+      - lsof
+      - python
+      - python-apt
+      - python-pip
+      - telnet
+      - tmux
+      - ufw
+      - vim
+    state: latest
+
+- name: remove unused packages
+  apt:
+    autoremove: yes
+    update_cache: yes

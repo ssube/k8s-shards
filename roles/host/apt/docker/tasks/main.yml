@@ -1,0 +1,27 @@
+- name: remove old versions of docker
+  apt:
+    name:
+      - docker
+      - docker-engine
+      - docker.io
+      - containerd
+      - runc
+    state: absent
+
+- name: add docker apt key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+
+- name: add docker apt repo
+  apt_repository:
+    repo: "deb https://download.docker.com/linux/ubuntu bionic stable"
+    state: present
+
+- name: install docker packages
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    update_cache: yes
