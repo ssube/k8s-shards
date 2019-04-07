@@ -1,0 +1,31 @@
+# ufw commands may conflict with weave iptables
+# make sure to retry, no need to wait
+- name: allow outgoing
+  <<: &network-retry
+    retries: 3
+    delay: 1
+  ufw:
+    rule: allow
+    direction: out
+
+- name: allow traffic from peers
+  <<: [*network-retry]
+  ufw:
+    rule: allow
+    from_ip: "{{ hostvars[item]['ansible_default_ipv4']['address'] }}"
+  when: "'ansible_default_ipv4' in hostvars[item]"
+  with_items: "{{ groups['cluster'] }}"
+
+- name: allow traffic from cluster
+  <<: [*network-retry]
+  ufw:
+    rule: allow
+    from_ip: "{{ item }}"
+  with_items:
+    - 10.0.0.0/8
+
+- name: enable firewall
+  <<: [*network-retry]
+  ufw:
+    state: enabled
+    policy: deny

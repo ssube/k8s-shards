@@ -1,0 +1,23 @@
+- name: admin group
+  group:
+    name: admin
+
+- name: admin sudo
+  lineinfile:
+    path: /etc/sudoers
+    regexp: '^%admin'
+    line: '%admin ALL=(ALL) NOPASSWD:ALL'
+
+- name: admin user
+  user:
+    name: "{{ item.name }}"
+    create_home: True
+    groups: "{{ item.groups }}"
+  when: "'key' in item"
+  with_items: "{{ admins }}"
+
+- name: user key
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.key }}"
+  with_items: "{{ admins }}"

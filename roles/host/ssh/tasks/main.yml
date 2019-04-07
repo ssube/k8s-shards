@@ -1,0 +1,34 @@
+# from https://stackoverflow.com/a/42007139/129032
+- name: retain ssh agents during sudo
+  lineinfile:
+    dest: /etc/sudoers
+    insertafter: '^#?\s*Defaults\s+env_keep\b'
+    line: 'Defaults    env_keep += "SSH_AUTH_SOCK"'
+
+- name: add common ssh keys
+  shell: ssh-keyscan {{item}} >> /etc/ssh/ssh_known_hosts
+  with_items:
+    - github.com
+    - git.apextoaster.com
+
+- name: secure sshd
+  notify:
+    - restart sshd
+  lineinfile:
+    dest: "/etc/ssh/sshd_config"
+    regexp: "^{{item.name}} "
+    line: "{{item.name}} {{item.value}}"
+    state: present
+  with_items:
+    - name: "PasswordAuthentication"
+      value: "no"
+    - name: "PermitRootLogin"
+      value: "no"
+    - name: "Port"
+      value: "{{ secrets.ssh.port }}"
+    - name: "PubkeyAuthentication"
+      value: "yes"
+    - name: "RSAAuthentication"
+      value: "yes"
+    - name: "X11Forwarding"
+      value: "no"
