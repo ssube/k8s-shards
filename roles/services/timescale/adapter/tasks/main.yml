@@ -4,5 +4,4 @@
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'deploy.yml') }}"
-  vars:
-    item: "{{ secrets.timescale }}"
+  loop: "{{ secrets.timescale_adapter }}"

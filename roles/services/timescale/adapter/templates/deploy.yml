@@ -4,8 +4,8 @@ metadata:
   name: timescale-{{ item.name }}-adapter
   labels: &labels
     k8s-app: timescale
-    "{{ secrets.dns.base }}/timescale/name": "{{ item.name }}"
-    "{{ secrets.dns.base }}/timescale/role": "adapter"
+    "{{ secrets.dns.base }}/timescale-name": "{{ item.name }}"
+    "{{ secrets.dns.base }}/timescale-role": "adapter"
 spec:
   serviceName: timescale-adapter
   replicas: 1
@@ -21,10 +21,10 @@ spec:
           image: "timescale/prometheus-postgresql-adapter:0.4.1"
           args:
             - -log.level=info
-            - -pg.host=timescale-{{ item.name }}.monitor.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}
-            - -pg.user={{ item.user }}
-            - -pg.password={{ item.pass }}
-            - -pg.database={{ item.name }}
+            - -pg.host=timescale-{{ item.name }}.{{ item.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}
+            - -pg.user={{ item.postgres.name }}
+            - -pg.password={{ item.postgres.pass }}
+            - -pg.database={{ item.postgres.name }}
             - -pg.schema=prometheus
             - -pg.use-timescaledb
             - -pg.db-connect-retries=3
