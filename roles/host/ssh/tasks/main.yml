@@ -11,6 +11,11 @@
     - github.com
     - git.apextoaster.com
 
+- name: install sshd
+  apt:
+    name:
+      - openssh-server
+
 - name: secure sshd
   notify:
     - restart sshd

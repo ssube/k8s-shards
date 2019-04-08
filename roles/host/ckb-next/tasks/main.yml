@@ -1,0 +1,24 @@
+- name: clone ckb-next tag
+  git:
+    dest: /usr/src/ckb-next-{{ secrets.ckb_next.version }}
+    repo: https://github.com/ckb-next/ckb-next.git
+    version: "v{{ secrets.ckb_next.version }}"
+  register: ckb_next_clone
+
+- name: install dependencies
+  apt:
+    name:
+      - build-essential
+      - cmake
+      - libudev-dev
+      - qt5-default
+      - zlib1g-dev
+      - libappindicator-dev
+      - libpulse-dev
+      - libquazip5-dev
+
+- name: install ckb-next
+  when: ckb_next_clone.changed
+  shell: ./quickinstall
+  args:
+    chdir: /usr/src/ckb-next-{{ secrets.ckb_next.version }}

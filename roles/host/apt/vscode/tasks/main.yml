@@ -1,0 +1,23 @@
+- name: install dependencies
+  apt:
+    name:
+      - gconf2
+      - libasound2
+      - libgtk2.0-0
+      - libxss1
+    state: present
+
+- name: add vscode apt key
+  apt_key:
+    url: 'https://packages.microsoft.com/keys/microsoft.asc'
+    state: present
+
+- name: add vscode apt repo
+  apt_repository:
+    repo: "deb https://packages.microsoft.com/repos/vscode stable main"
+    state: present
+
+- name: install vscode
+  apt:
+    name: "code"
+    state: present
