@@ -14,6 +14,9 @@ spec:
     labels: *labels
   remoteWrite:
     - url: http://timescale-{{ item.postgres.name }}.{{ item.postgres.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}/write
+      queueConfig:
+        minShards: {{ item.queue.shards }}
+        maxShards: {{ item.queue.shards }}
   replicas: 1
   resources:
     requests:
