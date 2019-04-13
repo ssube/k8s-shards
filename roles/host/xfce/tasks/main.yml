@@ -9,3 +9,9 @@
     name:
       - xfce4
     state: latest
+
+- name: install arc theme
+  apt:
+    name:
+      - arc-theme
+    state: latest

@@ -1,0 +1,10 @@
+- name: clone blackbox
+  git:
+    dest: /tmp/blackbox
+    repo: https://github.com/StackExchange/blackbox.git
+    version: master
+
+- name: install blackbox
+  shell:
+    cmd: make copy-install
+    chdir: /tmp/blackbox

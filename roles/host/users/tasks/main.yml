@@ -8,16 +8,32 @@
     regexp: '^%admin'
     line: '%admin ALL=(ALL) NOPASSWD:ALL'
 
-- name: admin user
+- name: user
   user:
     name: "{{ item.name }}"
     create_home: True
     groups: "{{ item.groups }}"
   when: "'key' in item"
-  with_items: "{{ admins }}"
+  loop: "{{ secrets.users }}"
 
-- name: user key
+- name: user keys
   authorized_key:
-    user: "{{ item.name }}"
-    key: "{{ item.key }}"
-  with_items: "{{ admins }}"
+    user: "{{ item.0.name }}"
+    key: "{{ item.1 }}"
+  loop: "{{ secrets.users | subelements('keys') }}"
+
+- name: user github access
+  shell: ssh -v git@github.com
+  register: ssh_test
+
+- name: debug github access
+  debug:
+    msg: "{{ ssh_test }}"
+
+- name: user repos
+  become: false
+  git:
+    dest: "/home/{{ item.0.name }}/{{ item.1.path }}"
+    repo: "{{ item.1.repo }}"
+    version: "{{ item.1.version }}"
+  loop: "{{ secrets.users | subelements('repos') }}"

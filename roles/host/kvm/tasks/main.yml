@@ -1,0 +1,10 @@
+- name: install kvm
+  apt:
+    name:
+      - libvirt-bin
+      - libvirt-clients
+      - libvirt-daemon
+      - libvirt-daemon-driver-storage-rbd
+      - python-libvirt
+      - virt-manager
+      - virt-top

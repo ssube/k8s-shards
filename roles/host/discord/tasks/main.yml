@@ -1,0 +1,9 @@
+- name: install dependencies
+  apt:
+    name:
+      - libgconf-2-4
+      - libappindicator1
+
+- name: install discord
+  apt:
+    deb: https://dl.discordapp.net/apps/linux/{{ secrets.discord.version }}/discord-{{ secrets.discord.version }}.deb

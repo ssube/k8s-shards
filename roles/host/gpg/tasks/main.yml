@@ -1,0 +1,43 @@
+- name: install gpg
+  apt:
+    name:
+      - dbus-user-session
+      - gpg
+      - pcscd
+      - pcsc-tools
+      - scdaemon
+    state: latest
+
+- name: gpg home dir
+  file:
+    state: directory
+    path: "/home/{{ item.name }}/.gnupg"
+    owner: "{{ item.name }}"
+  loop: "{{ secrets.users }}"
+
+- name: scdaemon conf
+  template:
+    src: scdaemon.conf
+    dest: "/home/{{ item.name }}/.gnupg/scdaemon.conf"
+    owner: "{{ item.name }}"
+  loop: "{{ secrets.users }}"
+
+- name: gpg agent conf
+  template:
+    src: gpg-agent.conf
+    dest: "/home/{{ item.name }}/.gnupg/gpg-agent.conf"
+    owner: "{{ item.name }}"
+  loop: "{{ secrets.users }}"
+
+- name: patch gpg agent socket
+  lineinfile:
+    path: /usr/lib/systemd/user/gpg-agent-ssh.socket
+    insertafter: ^ListenStream
+    line: ExecStartPost=/bin/systemctl --user set-environment SSH_AUTH_SOCK=%t/gnupg/S.gpg-agent.ssh
+  notify: restart gpg agent socket
+
+- name: install pass
+  apt:
+    name:
+      - pass
+    state: latest

@@ -1,0 +1,8 @@
+- name: reload gpg agent
+  shell: gpg-connect-agent reloadagent /bye
+
+- name: restart gpg agent socket
+  systemd:
+    name: gpg-agent
+    state: restarted
+    daemon_reload: yes
