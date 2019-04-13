@@ -25,3 +25,9 @@
       - docker-ce-cli
       - containerd.io
     update_cache: yes
+
+- name: configure containerd
+  template:
+    src: containerd.toml
+    dest: /etc/containerd/containerd.toml
+  notify: restart containerd

@@ -15,3 +15,8 @@
       - kubeadm
       - kubectl
       - kubelet
+
+- name: configure net for cri
+  template:
+    src: cri.conf
+    dest: /etc/sysctl.d/99-kubernetes-cri.conf
