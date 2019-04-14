@@ -1,7 +1,7 @@
 # monitoring datastore
 - name: timescale data volume
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'volume-data.yml') }}"
@@ -12,7 +12,7 @@
 
 - name: timescale server deploy
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'deploy.yml') }}"
@@ -20,7 +20,7 @@
 
 - name: timescale service
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'service.yml') }}"
@@ -29,7 +29,7 @@
 - name: wait for timescale to be available
   check_mode: no
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     command:

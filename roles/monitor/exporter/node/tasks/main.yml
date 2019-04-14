@@ -1,42 +1,42 @@
 # node exporter
 - name: node exporter account
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'account.yml') }}"
 
 - name: node exporter role
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'role.yml') }}"
 
 - name: node exporter role binding
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'role-binding.yml') }}"
 
 - name: node exporter daemon
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'daemon.yml') }}"
 
 - name: node exporter service
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'service.yml') }}"
 
 - name: node exporter service monitor
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'monitor.yml') }}"

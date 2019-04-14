@@ -1,6 +1,6 @@
 - name: timescale prune account
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'account.yml') }}"
@@ -8,7 +8,7 @@
 
 - name: timescale prune role
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'role.yml') }}"
@@ -16,7 +16,7 @@
 
 - name: timescale prune bind
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'role-binding.yml') }}"
@@ -24,7 +24,7 @@
 
 - name: timescale prune job
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'job.yml') }}"

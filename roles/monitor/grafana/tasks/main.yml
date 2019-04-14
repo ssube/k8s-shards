@@ -1,62 +1,62 @@
 # grafana
 - name: grafana config
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'config.yml') }}"
 
 - name: grafana data volume
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'volume-data.yml') }}"
  
 - name: grafana deploy
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'deploy.yml') }}"
  
 - name: grafana service
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'service.yml') }}"
  
 - name: grafana ingress
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     content: "{{ lookup('template', 'ingress.yml') }}"
  
 - name: grafana backup account
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'account-backup.yml') }}"
 
 - name: grafana backup job
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'job-backup.yml') }}"
 
 - name: grafana backup role
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'role-backup.yml') }}"
 
 - name: grafana backup role binding
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'role-binding-backup.yml') }}"

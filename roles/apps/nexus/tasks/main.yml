@@ -1,33 +1,33 @@
 - name: nexus namespace
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     content: "{{ lookup('template', 'ns.yml') }}"
 
 - name: nexus data volume
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: nexus
     content: "{{ lookup('template', 'volume-data.yml') }}"
 
 - name: nexus deploy
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: nexus
     content: "{{ lookup('template', 'deploy.yml') }}"
 
 - name: nexus service
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: nexus
     content: "{{ lookup('template', 'service.yml') }}"
 
 - name: nexus ingress
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: nexus
     content: "{{ lookup('template', 'ingress.yml') }}"

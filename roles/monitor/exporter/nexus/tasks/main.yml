@@ -1,13 +1,13 @@
 - name: apply nexus exporter deploy
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: "{{ secrets.monitor.namespace }}"
     content: "{{ lookup('template', 'deploy.yml') }}"
 
 - name: apply nexus exporter service
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: "{{ secrets.monitor.namespace }}"
     content: "{{ lookup('template', 'service.yml') }}"

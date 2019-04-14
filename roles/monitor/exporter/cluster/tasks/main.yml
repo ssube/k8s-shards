@@ -1,14 +1,14 @@
 # cluster monitors
 - name: cluster manager service
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: kube-system
     content: "{{ lookup('template', 'service-manager.yml') }}"
 
 - name: cluster scheduler service
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: kube-system
     content: "{{ lookup('template', 'service-scheduler.yml') }}"
@@ -16,7 +16,7 @@
 # service monitors
 - name: cluster service monitors
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: "{{ secrets.monitor.namespace }}"
     content: "{{ lookup('template', 'monitor-' + item + '.yml') }}"

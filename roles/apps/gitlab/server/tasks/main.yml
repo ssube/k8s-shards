@@ -1,6 +1,6 @@
 - name: gitlab namespaces
   k8s:
-    kubeconfig: "{{ secrets.context }}"
+    kubeconfig: "{{ secrets.cluster.context }}"
     definition:
       apiVersion: v1
       kind: Namespace
@@ -12,56 +12,56 @@
 
 - name: gitlab server assets
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: gitlab
     content: "{{ lookup('template', 'secret-assets.yml') }}"
 
 - name: gitlab server config
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: gitlab
     content: "{{ lookup('template', 'secret-config.yml') }}"
 
 - name: gitlab server data volume
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: gitlab
     content: "{{ lookup('template', 'volume-data.yml') }}"
 
 - name: gitlab server secrets volume
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: gitlab
     content: "{{ lookup('template', 'volume-secrets.yml') }}"
 
 - name: gitlab server deploy
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: gitlab
     content: "{{ lookup('template', 'deploy.yml') }}"
 
 - name: gitlab server service
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: gitlab
     content: "{{ lookup('template', 'service.yml') }}"
 
 - name: gitlab server ingress
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: gitlab
     content: "{{ lookup('template', 'ingress.yml') }}"
 
 - name: gitlab server monitors
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     content: "{{ lookup('template', 'monitor-{{ item }}.yml') }}"
   with_items:

@@ -1,20 +1,20 @@
 # uptimerobot monitor
 - name: uptimerobot exporter deploy
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'deploy.yml') }}"
 
 - name: uptimerobot exporter service
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'service.yml') }}"
 
 - name: uptimerobot exporter monitor
   environment:
-    KUBECONFIG: "{{ secrets.context }}"
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     file: templates/monitor.yml
