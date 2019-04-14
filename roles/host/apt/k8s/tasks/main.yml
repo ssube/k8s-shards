@@ -12,9 +12,9 @@
   apt:
     update_cache: yes
     name:
-      - kubeadm
-      - kubectl
-      - kubelet
+      - kubeadm={{ secrets.cluster.version }}
+      - kubectl={{ secrets.cluster.version }}
+      - kubelet={{ secrets.cluster.version }}
 
 - name: configure net for cri
   template:
