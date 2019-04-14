@@ -21,19 +21,3 @@
     user: "{{ item.0.name }}"
     key: "{{ item.1 }}"
   loop: "{{ secrets.users | subelements('keys') }}"
-
-- name: user github access
-  shell: ssh -v git@github.com
-  register: ssh_test
-
-- name: debug github access
-  debug:
-    msg: "{{ ssh_test }}"
-
-- name: user repos
-  become: false
-  git:
-    dest: "/home/{{ item.0.name }}/{{ item.1.path }}"
-    repo: "{{ item.1.repo }}"
-    version: "{{ item.1.version }}"
-  loop: "{{ secrets.users | subelements('repos') }}"
