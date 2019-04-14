@@ -1,0 +1,23 @@
+- name: apply calico custom resources
+  kubectl:
+    content: "{{ lookup('template', 'crd.yml') }}"
+
+- name: apply calico account
+  kubectl:
+    content: "{{ lookup('template', 'account.yml') }}"
+
+- name: apply calico role
+  kubectl:
+    content: "{{ lookup('template', 'role.yml') }}"
+
+- name: apply calico role binding
+  kubectl:
+    content: "{{ lookup('template', 'role-binding.yml') }}"
+
+- name: apply calico config
+  kubectl:
+    content: "{{ lookup('template', 'config.yml') }}"
+
+- name: apply calico daemon
+  kubectl:
+    content: "{{ lookup('template', 'daemon.yml') }}"
