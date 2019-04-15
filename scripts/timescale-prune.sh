@@ -15,8 +15,7 @@ prune_query="SELECT drop_chunks(interval '${prune_hours}', '${prune_table}');"
 
 echo_color start "Pruning chunks older than ${prune_hours}"
 
-# TODO: validate prune_hours is a number
-timescale_pod="$(find_pod server monitor "${prune_domain}/timescale")"
+timescale_pod="$(find_pod timescale monitor)"
 echo_color info "Running query in pod: ${timescale_pod}"
 kubectl exec -n monitor ${timescale_pod} -it -- psql -U postgres -d prometheus -c "${prune_query}"
 

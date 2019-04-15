@@ -1,16 +1,22 @@
 - name: apply luigi config
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: monitor
     content: "{{ lookup('template', 'config.yml') }}"
 
 - name: apply luigi server
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: monitor
     content: "{{ lookup('template', 'deploy-server.yml') }}"
 
 - name: apply luigi service
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: monitor
