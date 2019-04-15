@@ -6,7 +6,7 @@ metadata:
 data:
   typha_service_name: "none"
   calico_backend: "bird"
-  veth_mtu: "{{ secrets.network.cluster.mtu }}"
+  veth_mtu: "{{ secrets.cluster.network.mtu }}"
   cni_network_config: |-
     {
       "name": "k8s-pod-network",

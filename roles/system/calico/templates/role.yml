@@ -43,6 +43,7 @@ rules:
       - namespaces
       - serviceaccounts
     verbs:
+      - get
       - list
       - watch
   # The CNI plugin patches pods/status.
