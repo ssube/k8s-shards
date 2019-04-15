@@ -1,41 +1,55 @@
 # prometheus instance
 - name: prometheus service account
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'account.yml') }}"
   loop: "{{ secrets.prometheus }}"
 
 - name: prometheus cluster role
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'role.yml') }}"
   loop: "{{ secrets.prometheus }}"
 
 - name: prometheus role binding
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'role-binding.yml') }}"
   loop: "{{ secrets.prometheus }}"
 
 - name: prometheus scrape config
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'secret-scrape.yml') }}"
   loop: "{{ secrets.prometheus }}"
 
 - name: prometheus deploy
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'deploy.yml') }}"
   loop: "{{ secrets.prometheus }}"
 
 - name: prometheus service
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'service.yml') }}"
   loop: "{{ secrets.prometheus }}"
 
 - name: prometheus monitor
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'monitor.yml') }}"

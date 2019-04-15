@@ -1,22 +1,30 @@
 - name: apply snmp-exporter config
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: monitor
     content: "{{ lookup('template', 'config.yml') }}"
 
 - name: apply snmp-exporter deploy
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: monitor
     content: "{{ lookup('template', 'deploy.yml') }}"
 
 - name: apply snmp-exporter service
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: monitor
     file: templates/service.yml
 
 - name: apply snmp-exporter monitor
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: monitor

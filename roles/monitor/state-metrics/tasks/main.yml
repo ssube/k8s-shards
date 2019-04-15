@@ -1,47 +1,62 @@
-
 - name: apply state metrics account
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: kube-system
     file: templates/account.yml
 
 - name: apply state metrics cluster role
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: kube-system
     file: templates/cluster-role.yml
 
 - name: apply state metrics cluster role binding
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: kube-system
     file: templates/cluster-role-binding.yml
 
 - name: apply state metrics role
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: kube-system
     file: templates/role.yml
 
 - name: apply state metrics role binding
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: kube-system
     file: templates/role-binding.yml
 
 - name: apply state metrics deploy
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: kube-system
     file: templates/deploy.yml
 
 - name: apply state metrics service
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: kube-system
     file: templates/service.yml
 
 - name: apply state metrics service monitor
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: monitor

@@ -1,20 +1,28 @@
 # prometheus controller
 - name: prometheus operator service account
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'account.yml') }}"
 
 - name: prometheus operator cluster role
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'role.yml') }}"
 
 - name: prometheus operator role binding
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'role-binding.yml') }}"
 
 - name: prometheus operator deploy
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: monitor
     content: "{{ lookup('template', 'deploy.yml') }}"

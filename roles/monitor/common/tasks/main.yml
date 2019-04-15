@@ -1,4 +1,6 @@
 - name: monitor namespace
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     content: "{{ lookup('template', 'ns.yml') }}"
