@@ -1,4 +1,6 @@
 - name: apply coredns config
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     namespace: kube-system

@@ -1,4 +1,6 @@
 - name: apply ceph secret
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     content: "{{ lookup('template', 'secret.yml') }}"

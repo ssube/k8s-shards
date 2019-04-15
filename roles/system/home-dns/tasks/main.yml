@@ -1,14 +1,20 @@
 - name: apply dns config
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     content: "{{ lookup('template', 'config.yml') }}"
 
 - name: apply dns credentials secret
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     content: "{{ lookup('template', 'secret.yml') }}"
 
 - name: apply dns deploy
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     content: "{{ lookup('template', 'deploy.yml') }}"

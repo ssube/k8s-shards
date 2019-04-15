@@ -1,9 +1,13 @@
 - name: apply cert manager namespace
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     file: "templates/ns.yml"
 
 - name: apply cert manager crds
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     file: "templates/{{ item }}.yml"
@@ -15,6 +19,8 @@
     - crd-orders
 
 - name: apply cert manager rbac
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     file: "templates/{{ item }}.yml"
@@ -33,6 +39,8 @@
     - role-binding-webhook
 
 - name: apply cert manager deploys
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     file: "templates/deploy-{{ item }}.yml"
@@ -42,6 +50,8 @@
     - webhook
 
 - name: apply cert manager services
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     file: "templates/{{ item }}.yml"
@@ -49,6 +59,8 @@
      - service-webhook
 
 - name: apply cert manager webhooks
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     file: "templates/{{ item }}.yml"
@@ -56,6 +68,8 @@
      - webhook
 
 - name: apply cert manager api servers
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     file: "templates/{{ item }}.yml"
@@ -63,6 +77,8 @@
     - api-server-webhook
 
 - name: apply cert manager internal issuers
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     file: "templates/issuer-{{ item }}.yml"
@@ -71,6 +87,8 @@
     - webhook-ca
 
 - name: apply cert manager certificates
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     file: "templates/cert-{{ item }}.yml"
@@ -79,6 +97,8 @@
     - webhook-tls
 
 - name: apply cert manager letsencrypt issuers
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     command: apply
     content: "{{ lookup('template', 'issuer-' + item + '.yml') }}"
