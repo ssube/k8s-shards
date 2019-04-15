@@ -20,6 +20,7 @@
       - python-apt
       - python-netaddr
       - python-pip
+      - python-psycopg2
       - telnet
       - tmux
       - ufw
