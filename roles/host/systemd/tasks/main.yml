@@ -3,3 +3,16 @@
     name: journal-prune
     special_time: hourly
     job: journalctl --vacuum-size=2G
+
+- name: disable systemd-resolved
+  systemd:
+    name: systemd-resolved
+    enabled: no
+    state: stopped
+
+- name: reset network-manager dns
+  lineinfile:
+    path: /etc/NetworkManager/NetworkManager.conf
+    insertafter: "^\[main\]"
+    regexp: "^dns="
+    line: "dns=default"
