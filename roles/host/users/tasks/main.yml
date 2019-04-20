@@ -21,3 +21,25 @@
     user: "{{ item.0.name }}"
     key: "{{ item.1 }}"
   loop: "{{ secrets.users | subelements('keys') }}"
+
+- name: user repos
+  become: yes
+  become_user: "{{ item.0.name }}"
+  git:
+    dest: "/home/{{ item.0.name }}/{{ item.1.path }}"
+    repo: "{{ item.1.repo }}"
+    version: "{{ item.1.version }}"
+  loop: "{{ secrets.users | subelements('repos') }}"
+  loop_control:
+    label: "{{ item.0.name }} - {{ item.1.repo }}"
+
+- name: user repos setup
+  become: yes
+  become_user: "{{ item.0.name }}"
+  shell: "{{ item.1.exec }}"
+  args:
+    chdir: "/home/{{ item.0.name }}/{{ item.1.path }}"
+  when: "'exec' in item.1"
+  loop: "{{ secrets.users | subelements('repos') }}"
+  loop_control:
+    label: "{{ item.0.name }} - {{ item.1.repo }}"
