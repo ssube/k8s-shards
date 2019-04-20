@@ -6,12 +6,9 @@ metadata:
   name: node-exporter
 spec:
   endpoints:
-  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-    interval: 30s
-    port: https
-    scheme: https
-    tlsConfig:
-      insecureSkipVerify: true
+  - interval: 30s
+    port: http
+    scheme: http
   jobLabel: k8s-app
   namespaceSelector:
     matchNames:
