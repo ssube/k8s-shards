@@ -22,7 +22,6 @@
       - python-pip
       - python-psycopg2
       - telnet
-      - tmux
       - ufw
       - vim
     state: latest

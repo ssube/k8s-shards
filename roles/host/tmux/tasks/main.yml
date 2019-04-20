@@ -1,0 +1,13 @@
+- name: install tmux
+  apt:
+    name: tmux
+    state: latest
+
+- name: install tpm
+  become: yes
+  become_user: "{{ item.name }}"
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: "/home/{{ item.name }}/.tmux/plugins/tpm"
+    version: v3.0.0
+  loop: "{{ secrets.users }}"
