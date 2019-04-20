@@ -1,7 +1,7 @@
 - name: disable wayland
   lineinfile:
     path: /etc/gdm3/custom.conf
-    regex: "^WaylandEnable="
+    regexp: "^WaylandEnable="
     line: "WaylandEnable=false"
 
 - name: install xfce
