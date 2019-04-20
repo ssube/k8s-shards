@@ -15,8 +15,10 @@ spec:
   remoteWrite:
     - url: http://timescale-{{ item.postgres.name }}.{{ item.postgres.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}/write
       queueConfig:
-        minShards: {{ item.queue.shards }}
+        capacity: {{ item.queue.capacity }}
+        minShards: {{ (item.queue.shards / 2) | round | int }}
         maxShards: {{ item.queue.shards }}
+        maxSamplesPerSend: {{ item.queue.batch }}
   replicas: 1
   resources:
     requests:
