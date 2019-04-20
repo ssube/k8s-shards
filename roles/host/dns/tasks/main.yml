@@ -1,0 +1,17 @@
+- name: disable systemd-resolved
+  service:
+    name: systemd-resolved
+    enabled: no
+    state: stopped
+
+- name: set network-manager dns
+  lineinfile:
+    path: /etc/NetworkManager/NetworkManager.conf
+    insertafter: "^\\[main\\]"
+    regexp: "^dns="
+    line: "dns=default"
+
+- name: resolv conf
+  template:
+    dest: /etc/resolv.conf
+    src: resolv.conf
