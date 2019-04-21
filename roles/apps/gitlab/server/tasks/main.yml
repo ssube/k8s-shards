@@ -1,12 +1,9 @@
 - name: gitlab namespaces
-  k8s:
-    kubeconfig: "{{ secrets.cluster.context }}"
-    definition:
-      apiVersion: v1
-      kind: Namespace
-      metadata:
-        name: "{{ item }}"
-  with_items:
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
+  kubectl:
+    content: "{{ lookup('template', 'ns.yml') }}"
+  loop:
     - gitlab
     - gitlab-jobs
 
@@ -64,6 +61,6 @@
     KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     content: "{{ lookup('template', 'monitor-{{ item }}.yml') }}"
-  with_items:
+  loop:
     - metrics
     - rails
