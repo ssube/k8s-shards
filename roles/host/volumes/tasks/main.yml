@@ -1,0 +1,8 @@
+- name: mount data volumes
+  when: host_volumes is defined
+  mount:
+    fstype: "{{ item.fstype | default('ext4') }}"
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
+    state: mounted
+  with_items: "{{ host_volumes }}"
