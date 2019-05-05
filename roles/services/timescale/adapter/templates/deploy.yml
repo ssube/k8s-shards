@@ -18,18 +18,16 @@ spec:
       nodeSelector: {{ item.selector | to_json }}
       containers:
         - name: adapter
-          image: "timescale/prometheus-postgresql-adapter:0.4.1"
+          image: "ssube/prometheus-sql-adapter:master"
           args:
-            - -log.level=info
-            - -pg.host=timescale-{{ item.name }}.{{ item.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}
-            - -pg.user={{ item.postgres.name }}
-            - -pg.password={{ item.postgres.pass }}
-            - -pg.database={{ item.postgres.name }}
-            - -pg.schema=prometheus
-            - -pg.use-timescaledb
-            - -pg.db-connect-retries=3
-            - -pg.max-open-conns=8
-            - -pg.max-idle-conns=4
+            - --log.level=info
+            - --pg.conn-str=host=timescale-{{ item.name }}.{{ item.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}
+              dbname={{ item.postgres.name }}
+              user={{ item.postgres.name }}
+              password={{ item.postgres.pass }}
+              sslmode=disable
+            - --pg.max-open=8
+            - --pg.max-idle=4
           ports:
             - containerPort: 9201
               name: http
