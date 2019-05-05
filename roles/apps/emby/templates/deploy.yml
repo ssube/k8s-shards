@@ -21,7 +21,7 @@ spec:
 
       containers:
         - name: emby-server
-          image: "emby/embyserver:4.0.2.0"
+          image: "emby/embyserver:4.1.1.0"
           env:
             - name: UID
               value: "1000"

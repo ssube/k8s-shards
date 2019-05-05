@@ -1,11 +1,17 @@
 - name: apply emby server
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     content: "{{ lookup('template', 'deploy.yml') }}"
 
 - name: apply emby service
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     content: "{{ lookup('template', 'service.yml') }}"
 
 - name: apply emby ingress
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     content: "{{ lookup('template', 'ingress.yml') }}"
