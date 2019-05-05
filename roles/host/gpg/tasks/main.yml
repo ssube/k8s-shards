@@ -34,7 +34,6 @@
     path: /usr/lib/systemd/user/gpg-agent-ssh.socket
     insertafter: ^ListenStream
     line: ExecStartPost=/bin/systemctl --user set-environment SSH_AUTH_SOCK=%t/gnupg/S.gpg-agent.ssh
-  notify: restart gpg agent socket
 
 - name: install pass
   apt:
