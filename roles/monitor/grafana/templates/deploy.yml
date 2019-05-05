@@ -30,6 +30,8 @@ spec:
               path: /api/health
               port: http
 
+          resources: {{ secrets.grafana.resources | to_json }}
+
           volumeMounts: &grafana-mounts
             - name: config
               mountPath: /etc/grafana
@@ -38,6 +40,7 @@ spec:
               mountPath: /data
               readOnly: false
 
+      nodeSelector: {{ secrets.grafana.selector | to_json }}
       volumes:
         - name: config
           secret:
