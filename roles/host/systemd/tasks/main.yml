@@ -13,6 +13,6 @@
 - name: reset network-manager dns
   lineinfile:
     path: /etc/NetworkManager/NetworkManager.conf
-    insertafter: "^\[main\]"
+    insertafter: "^\\[main\\]"
     regexp: "^dns="
     line: "dns=default"
