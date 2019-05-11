@@ -2,12 +2,18 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: timescale-prune
+  labels: &labels
+    k8s-app: timescale
+    "{{ secrets.dns.base }}/timescale-name": "{{ item.name }}"
+    "{{ secrets.dns.base }}/timescale-role": "prune"
 spec:
   schedule: "0 * * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
+        metadata:
+          labels: *labels
         spec:
           restartPolicy: Never
           containers:
