@@ -4,7 +4,7 @@ metadata:
   name: redis-{{ item.name }}
   labels: &labels
     k8s-app: redis
-    "{{ secrets.dns.base }}/redis/name": "{{ item.name }}"
+    "{{ secrets.dns.base }}/redis-name": "{{ item.name }}"
 spec:
   serviceName: "redis-{{ item.name }}"
   replicas: 1

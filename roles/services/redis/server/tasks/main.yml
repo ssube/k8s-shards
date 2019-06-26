@@ -1,0 +1,15 @@
+- name: redis server deploy
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
+  kubectl:
+    namespace: "{{ item.namespace }}"
+    content: "{{ lookup('template', 'deploy.yml') }}"
+  loop: "{{ secrets.redis_server }}"
+
+- name: redis server service
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
+  kubectl:
+    namespace: "{{ item.namespace }}"
+    content: "{{ lookup('template', 'service.yml') }}"
+  loop: "{{ secrets.redis_server }}"

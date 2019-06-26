@@ -1,2 +1,0 @@
-- name: apply redis deploy
-- name: apply redis service
