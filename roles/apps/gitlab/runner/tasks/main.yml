@@ -4,14 +4,14 @@
     KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: gitlab
-    definition: "{{ lookup('template', 'runner/account.yml') }}"
+    content: "{{ lookup('template', 'account.yml') }}"
 
 - name: gitlab runner config
   environment:
     KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
     namespace: gitlab
-    content: "{{ lookup('template', 'config.yml') }}"
+    content: "{{ lookup('template', 'secret-config.yml') }}"
   with_items: "{{ gitlab_runner.flavors }}"
  
 - name: gitlab runner secrets
