@@ -77,7 +77,7 @@ gitlab_rails['db_database'] = "{{ secrets.gitlab.database.name }}"
 gitlab_rails['db_pool'] = 20
 gitlab_rails['db_username'] = "{{ secrets.gitlab.database.user }}"
 gitlab_rails['db_password'] = "{{ secrets.gitlab.database.pass }}"
-gitlab_rails['db_host'] = "postgres.gitlab.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}"
+gitlab_rails['db_host'] = "postgres-{{ secrets.gitlab.database.name }}.gitlab.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}"
 gitlab_rails['db_port'] = 5432
 
 # nginx
@@ -100,7 +100,7 @@ prometheus['enable'] = false
 # redis
 redis['enable'] = false
 
-gitlab_rails['redis_host'] = "redis.gitlab.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}"
+gitlab_rails['redis_host'] = "redis-gitlab.gitlab.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}"
 gitlab_rails['redis_port'] = 6379
 
 # shell

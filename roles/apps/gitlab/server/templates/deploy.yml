@@ -111,7 +111,7 @@ spec:
             items:
               - key: gitlab.rb
                 mode: 0444
-                path: gitlab-config.rb
+                path: gitlab.rb
               - key: gitlab-secrets.json
                 mode: 0666
                 path: gitlab-secrets.json
