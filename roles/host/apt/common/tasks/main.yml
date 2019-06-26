@@ -15,12 +15,14 @@
       - dnsutils
       - git
       - gnupg2
+      - iputils-ping
       - lsof
       - python
       - python-apt
       - python-netaddr
       - python-pip
       - python-psycopg2
+      - sudo
       - telnet
       - ufw
       - vim
