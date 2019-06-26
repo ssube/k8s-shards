@@ -1,0 +1,34 @@
+- name: postgres server data volume
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
+  kubectl:
+    namespace: "{{ item.namespace }}"
+    content: "{{ lookup('template', 'volume-data.yml') }}"
+  when: item.storage.type == 'pvc'
+  loop: "{{ secrets.postgres_server }}"
+  loop_control:
+    label: "{{ item.name }} - {{ item.storage.type }}"
+
+- name: postgres server config
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
+  kubectl:
+    namespace: "{{ item.namespace }}"
+    content: "{{ lookup('template', 'secret-config.yml') }}"
+  loop: "{{ secrets.postgres_server }}"
+
+- name: postgres server deploy
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
+  kubectl:
+    namespace: "{{ item.namespace }}"
+    content: "{{ lookup('template', 'deploy.yml') }}"
+  loop: "{{ secrets.postgres_server }}"
+
+- name: postgres server service
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
+  kubectl:
+    namespace: "{{ item.namespace }}"
+    content: "{{ lookup('template', 'service.yml') }}"
+  loop: "{{ secrets.postgres_server }}"

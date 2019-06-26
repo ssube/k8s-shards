@@ -1,11 +1,12 @@
+#jinja2: trim_blocks:False
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres-{{ item.name }}
   labels: &labels
     k8s-app: postgres
-    "{{ secrets.dns.base }}/postgres/name": "{{ item.name }}"
-    "{{ secrets.dns.base }}/postgres/role": "server"
+    "{{ secrets.dns.base }}/postgres-name": "{{ item.name }}"
+    "{{ secrets.dns.base }}/postgres-role": "server"
 spec:
   replicas: 1
   selector:
@@ -37,5 +38,14 @@ spec:
           secret:
             secretName: postgres-{{ item.name }}-config
         - name: postgres-data
+# {% if item.storage.type == 'pvc' %}
           persistentVolumeClaim:
             claimName: postgres-{{ item.name }}-data
+# {% elif item.storage.type == 'rbd' %}
+          rbd:
+            <<: {{ secrets.ceph.volume | to_json }}
+            monitors: {{ secrets.ceph.mons | map(attribute='hostname') | list | to_json }}
+            readOnly: false
+            pool: {{ item.storage.class }}
+            image: {{ item.storage.name }}
+# {% endif %}
