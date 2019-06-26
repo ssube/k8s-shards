@@ -1,5 +1,5 @@
 # monitoring datastore
-- name: timescale data volume
+- name: timescale server data volume
   environment:
     KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
@@ -18,7 +18,7 @@
     content: "{{ lookup('template', 'deploy.yml') }}"
   loop: "{{ secrets.timescale_server }}"
 
-- name: timescale service
+- name: timescale server service
   environment:
     KUBECONFIG: "{{ secrets.cluster.context }}"
   kubectl:
