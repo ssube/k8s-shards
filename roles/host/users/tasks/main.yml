@@ -13,7 +13,6 @@
     name: "{{ item.name }}"
     create_home: True
     groups: "{{ item.groups }}"
-  when: "'key' in item"
   loop: "{{ secrets.users }}"
 
 - name: user keys
