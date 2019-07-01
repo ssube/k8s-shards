@@ -4,6 +4,9 @@ metadata:
   name: gitlab
   labels:
     k8s-app: gitlab
+  annotations:
+    nginx.ingress.kubernetes.io/enable-access-log: "false"
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
 
 spec:
   tls:
