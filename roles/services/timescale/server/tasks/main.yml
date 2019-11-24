@@ -45,29 +45,29 @@
   retries: 6
   delay: 10
 
-- name: timescale roles
-  postgresql_user:
-    login_host: "timescale-{{ item.0.name }}.{{ item.0.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}"
-    login_password: "{{ item.0.root.pass }}"
-    login_user: postgres
-    name: "{{ item.1.name }}"
-    password: "{{ item.1.pass }}"
-  loop: "{{ secrets.timescale_server | subelements('roles') }}"
+# name: timescale roles
+# postgresql_user:
+#   login_host: "timescale-{{ item.0.name }}.{{ item.0.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}"
+#   login_password: "{{ item.0.root.pass }}"
+#   login_user: postgres
+#   name: "{{ item.1.name }}"
+#   password: "{{ item.1.pass }}"
+# loop: "{{ secrets.timescale_server | subelements('roles') }}"
 
-- name: timescale databases
-  postgresql_db:
-    login_host: "timescale-{{ item.0.name }}.{{ item.0.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}"
-    login_password: "{{ item.0.root.pass }}"
-    login_user: postgres
-    name: "{{ item.1.name }}"
-    owner: "{{ item.1.owner }}"
-  loop: "{{ secrets.timescale_server | subelements('databases') }}"
+# name: timescale databases
+# postgresql_db:
+#   login_host: "timescale-{{ item.0.name }}.{{ item.0.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}"
+#   login_password: "{{ item.0.root.pass }}"
+#   login_user: postgres
+#   name: "{{ item.1.name }}"
+#   owner: "{{ item.1.owner }}"
+# loop: "{{ secrets.timescale_server | subelements('databases') }}"
 
-- name: timescale tables
-  psql:
-    login_host: "timescale-{{ item.0.name }}.{{ item.0.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}"
-    login_password: "{{ item.0.root.pass }}"
-    login_user: postgres
-    db: "{{ item.1.name }}"
-    query: "{{ lookup('template', 'schema.sql') }}"
-  loop: "{{ secrets.timescale_server | subelements('databases') }}"
+# name: timescale tables
+# postgresql_query:
+#   login_host: "timescale-{{ item.0.name }}.{{ item.0.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}"
+#   login_password: "{{ item.0.root.pass }}"
+#   login_user: postgres
+#   db: "{{ item.1.name }}"
+#   query: "{{ lookup('template', 'schema.sql') }}"
+# loop: "{{ secrets.timescale_server | subelements('databases') }}"

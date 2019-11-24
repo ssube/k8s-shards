@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: nexus
-          image: "ssube/nexus-ext:3.15.2"
+          image: "ssube/nexus-ext:{{ nexus.version }}"
 
           ports:
             - containerPort: 8081
@@ -52,9 +52,7 @@ spec:
 
           volumeMounts: *nexus-volumes
 
-      nodeSelector:
-        zone: maple
-        role: apps
+      nodeSelector: {{ nexus.selector | to_json }}
       
       terminationGracePeriodSeconds: 60
       volumes:

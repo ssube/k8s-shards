@@ -1,0 +1,15 @@
+- name: timescale adapter deploy
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'deploy.yml') }}"
+  loop: "{{ secrets.timescale_adapter }}"
+
+- name: timescale adapter monitor
+  environment:
+    KUBECONFIG: "{{ secrets.cluster.context }}"
+  kubectl:
+    namespace: monitor
+    content: "{{ lookup('template', 'monitor.yml') }}"
+  loop: "{{ secrets.timescale_adapter }}"

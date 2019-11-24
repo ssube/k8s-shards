@@ -19,7 +19,7 @@ spec:
       nodeSelector: {{ item.selector | to_json }}
       containers:
         - name: server
-          image: "timescale/pg_prometheus:{{ item.version }}"
+          image: "timescale/timescaledb:{{ item.version }}"
           args:
             - -c
             - synchronous_commit=OFF
