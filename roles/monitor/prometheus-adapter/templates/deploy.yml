@@ -18,18 +18,26 @@ spec:
       nodeSelector: {{ item.selector | to_json }}
       containers:
         - name: adapter
-          image: "ssube/prometheus-sql-adapter:feat-xx-split-labels-postgres"
+          image: "ssube/prometheus-sql-adapter:master-postgres"
           imagePullPolicy: Always
           args:
             - --log.level=info
+            - --pg.cache-size=160000
             - --pg.conn-str=host=timescale-{{ item.name }}.{{ item.namespace }}.svc.{{ secrets.dns.cluster }}.{{ secrets.dns.base }}
-              dbname=test_split
+              dbname={{ secrets.dns.slug }}
               user={{ item.postgres.name }}
               password={{ item.postgres.pass }}
               sslmode=disable
             - --pg.max-open=8
             - --pg.max-idle=8
             # allowed metrics
+            - --allow=adapter_
+            - --allow=container_cpu_cfs_
+            - --allow=container_cpu_delta
+            - --allow=container_cpu_usage_seconds_total
+            - --allow=container_memory_rss
+            - --allow=container_spec_
+            - --allow=grafana_
             - --allow=isolex_
             - --allow=kube_cronjob_status_
             - --allow=kube_daemonset_status_
@@ -41,6 +49,7 @@ spec:
             - --allow=kube_replicaset_status_
             - --allow=kube_statefulset_status_
             - --allow=kubelet_
+            - --allow=nginx_
             - --allow=node_
             - --allow=nodejs_
             - --allow=process_
@@ -51,7 +60,7 @@ spec:
           resources:
             limits:
               cpu: 500m
-              memory: 1Gi
+              memory: 500Mi
             requests:
               cpu: 500m
               memory: 200Mi
