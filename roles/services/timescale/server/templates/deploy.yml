@@ -23,6 +23,44 @@ spec:
           args:
             - -c
             - synchronous_commit=OFF
+            - -c
+            - shared_buffers=1GB
+            - -c
+            - effective_cache_size=3GB
+            - -c
+            - maintenance_work_mem=512MB
+            - -c
+            - work_mem=5242kB
+            - -c
+            - timescaledb.max_background_workers=8
+            - -c
+            - max_worker_processes=13
+            - -c
+            - max_parallel_workers_per_gather=1
+            - -c
+            - max_parallel_workers=2
+            - -c
+            - wal_buffers=16MB
+            - -c
+            - min_wal_size=4GB
+            - -c
+            - max_wal_size=8GB
+            - -c
+            - default_statistics_target=50
+            - -c
+            - random_page_cost=1.1
+            - -c
+            - checkpoint_completion_target=0.9
+            - -c
+            - max_connections=100
+            - -c
+            - max_locks_per_transaction=64
+            - -c
+            - autovacuum_max_workers=10
+            - -c
+            - autovacuum_naptime=10
+            - -c
+            - effective_io_concurrency=200
           env:
             - name: POSTGRES_PASSWORD
               value: "{{ item.root.pass }}"
