@@ -7,7 +7,7 @@ metadata:
     "{{ secrets.dns.base }}/timescale-name": "{{ item.name }}"
     "{{ secrets.dns.base }}/timescale-role": "prune"
 spec:
-  schedule: "0 * * * *"
+  schedule: "0 0 * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
@@ -22,7 +22,7 @@ spec:
               args:
                 - /bin/bash
                 - -c
-                - /scripts/timescale-prune.sh metrics "{{ secrets.dns.base }}" "3 days"
+                - /scripts/timescale-prune.sh metric_samples "{{ secrets.dns.slug }}" "{{ secrets.dns.base }}" "30 days"
               volumeMounts:
                 - name: cluster-scripts
                   mountPath: /scripts
