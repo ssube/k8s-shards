@@ -12,11 +12,13 @@ check_interval = 30
 
   [runners.cache]
     Type = "s3"
+    Shared = true
+
+  [runners.cache.s3]
     ServerAddress = "s3-{{ secrets.region.primary }}.amazonaws.com"
     AccessKey = "{{ secrets.bot.access_key }}"
     SecretKey = "{{ secrets.bot.secret_key }}"
     BucketName = "{{ secrets.bucket.cache }}"
-    Shared = true
 
   [runners.kubernetes]
     image = "apextoaster/base"
