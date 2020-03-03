@@ -22,10 +22,10 @@ spec:
   replicas: 1
   resources:
     requests:
-      cpu: 1
+      cpu: '1'
       memory: 2Gi
     limits:
-      cpu: 2
+      cpu: '2'
       memory: 4Gi
   retention: {{ item.retention }}
   scrapeInterval: {{ item.interval }}
