@@ -31,29 +31,7 @@ spec:
             - --pg.max-open=8
             - --pg.max-idle=8
             # allowed metrics
-            - --allow=adapter_
-            - --allow=container_cpu_cfs_
-            - --allow=container_cpu_delta
-            - --allow=container_cpu_usage_seconds_total
-            - --allow=container_memory_rss
-            - --allow=container_spec_
-            - --allow=grafana_
-            - --allow=isolex_
-            - --allow=kube_cronjob_status_
-            - --allow=kube_daemonset_status_
-            - --allow=kube_deployment_status_
-            - --allow=kube_job_status_
-            - --allow=kube_node_status_
-            - --allow=kube_pod_container_status_
-            - --allow=kube_pod_status_
-            - --allow=kube_replicaset_status_
-            - --allow=kube_statefulset_status_
-            - --allow=kubelet_
-            - --allow=nginx_
-            - --allow=node_
-            - --allow=nodejs_
-            - --allow=process_
-            - --allow=prometheus_
+            - --allow=''
           ports:
             - containerPort: 9201
               name: http
