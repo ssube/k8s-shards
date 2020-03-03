@@ -19,7 +19,7 @@ spec:
       nodeSelector: {{ item.selector | to_json }}
       containers:
         - name: server
-          image: "timescale/timescaledb:{{ item.version }}"
+          image: "ssube/prometheus-sql-adapter:{{ item.version }}"
           args:
             - -c
             - synchronous_commit=OFF
@@ -66,6 +66,8 @@ spec:
               value: "{{ item.root.pass }}"
             - name: PGDATA
               value: "/pg-data/{{ item.name }}"
+            - name: POSTGRES_DB
+              value: "{{ secrets.dns.slug }}"
           ports:
             - containerPort: 5432
               name: db
